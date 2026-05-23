@@ -664,7 +664,9 @@ JSON.stringify(data.user)
 document.getElementById('authModal')
 .style.display='none';
 
+setTimeout(async () => {
 await loadTasks();
+}, 300);
 
 }
 
@@ -698,7 +700,9 @@ document.getElementById('authModal')
 document.getElementById('authModal')
 .style.display='none';
 
+setTimeout(async () => {
 await loadTasks();
+}, 300);
 
 }
 
@@ -951,7 +955,9 @@ document.getElementById('task_name').value='';
 document.getElementById('assigned_to').value='';
 document.getElementById('assigned_phone').value='';
 
+setTimeout(async () => {
 await loadTasks();
+}, 300);
 
 }
 
@@ -968,7 +974,9 @@ status:'Completed'
 })
 .eq('id',id);
 
+setTimeout(async () => {
 await loadTasks();
+}, 300);
 
 }
 
@@ -983,7 +991,9 @@ await supabaseClient
 .delete()
 .eq('id',id);
 
+setTimeout(async () => {
 await loadTasks();
+}, 300);
 
 }
 
