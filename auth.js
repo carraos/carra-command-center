@@ -1,31 +1,46 @@
-const SUPABASE_URL = 'https://xxsmolqcwbvitmryfgfa.supabase.co';
+const SUPABASE_URL =
+'https://xxsmolqcwbvitmryfgfa.supabase.co';
 
-const SUPABASE_ANON_KEY = 'sb_publishable_ejNWxFkpYXoMrjpL0GZtuQ_PvCd1k5f';
+const SUPABASE_ANON_KEY =
+'sb_publishable_ejNWxFkpYXoMrjpL0GZtuQ_PvCd1k5f';
 
-const supabaseClient = supabase.createClient(
+const supabaseClient =
+supabase.createClient(
   SUPABASE_URL,
   SUPABASE_ANON_KEY
 );
 
-// ===============================
+// ======================================
 // SIGN UP
-// ===============================
+// ======================================
 
 async function signUp(){
 
   const email =
-    document.getElementById('signup_email').value;
+  document.getElementById(
+    'auth_email'
+  ).value;
 
   const password =
-    document.getElementById('signup_password').value;
+  document.getElementById(
+    'auth_password'
+  ).value;
+
+  if(!email || !password){
+
+    alert('Please enter email and password');
+
+    return;
+
+  }
 
   const { data, error } =
-    await supabaseClient.auth.signUp({
+  await supabaseClient.auth.signUp({
 
-      email,
-      password
+    email,
+    password
 
-    });
+  });
 
   if(error){
 
@@ -35,31 +50,54 @@ async function signUp(){
 
   }
 
-  alert('Account created successfully');
+  alert(
+    'Account created successfully'
+  );
 
-  window.location.href = '/';
+  localStorage.setItem(
+    'carra_user',
+    JSON.stringify(data.user)
+  );
+
+  document.getElementById(
+    'authModal'
+  ).style.display='none';
 
 }
 
-// ===============================
+// ======================================
 // LOGIN
-// ===============================
+// ======================================
 
 async function login(){
 
   const email =
-    document.getElementById('login_email').value;
+  document.getElementById(
+    'auth_email'
+  ).value;
 
   const password =
-    document.getElementById('login_password').value;
+  document.getElementById(
+    'auth_password'
+  ).value;
+
+  if(!email || !password){
+
+    alert('Please enter email and password');
+
+    return;
+
+  }
 
   const { data, error } =
-    await supabaseClient.auth.signInWithPassword({
+  await supabaseClient
+  .auth
+  .signInWithPassword({
 
-      email,
-      password
+    email,
+    password
 
-    });
+  });
 
   if(error){
 
@@ -74,200 +112,89 @@ async function login(){
     JSON.stringify(data.user)
   );
 
-  window.location.href = '/';
-
-}
-
-// ===============================
-// LOGOUT
-// ===============================
-
-async function logout(){
-
-  await supabaseClient.auth.signOut();
-
-  localStorage.removeItem('carra_user');
+  document.getElementById(
+    'authModal'
+  ).style.display='none';
 
   location.reload();
 
 }
-// =====================================
-// CHECK USER SESSION
-// =====================================
 
-async function checkUser(){
+// ======================================
+// LOGOUT
+// ======================================
+
+async function logout(){
+
+  await supabaseClient
+  .auth
+  .signOut();
+
+  localStorage.removeItem(
+    'carra_user'
+  );
+
+  location.reload();
+
+}
+
+// ======================================
+// CHECK SESSION
+// ======================================
+
+async function checkSession(){
 
   const {
     data: { user }
-  } = await supabaseClient.auth.getUser();
+  } =
+  await supabaseClient
+  .auth
+  .getUser();
 
-  // IF USER NOT LOGGED IN
+  if(user){
 
-  if(!user){
+    localStorage.setItem(
+      'carra_user',
+      JSON.stringify(user)
+    );
 
-    document.body.innerHTML = `
+    const modal =
+    document.getElementById(
+      'authModal'
+    );
 
-      <div style="
-        background:#050816;
-        color:white;
-        height:100vh;
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        flex-direction:column;
-        font-family:Inter,sans-serif;
-      ">
+    if(modal){
 
-        <h1 style="
-          margin-bottom:20px;
-          font-size:42px;
-        ">
-          🔒 Login Required
-        </h1>
+      modal.style.display='none';
 
-        <p style="
-          color:#94a3b8;
-          margin-bottom:30px;
-        ">
-          Please login to access CARRA OS
-        </p>
-        <div style="
-  display:flex;
-  flex-direction:column;
-  gap:14px;
-  width:320px;
-">
+    }
 
-  <input
-    id="login_email"
-    type="email"
-    placeholder="Email"
-    style="
-      padding:16px;
-      border:none;
-      border-radius:14px;
-      background:#111827;
-      color:white;
-      font-size:15px;
-    "
-  />
+  }else{
 
-  <input
-    id="login_password"
-    type="password"
-    placeholder="Password"
-    style="
-      padding:16px;
-      border:none;
-      border-radius:14px;
-      background:#111827;
-      color:white;
-      font-size:15px;
-    "
-  />
+    localStorage.removeItem(
+      'carra_user'
+    );
 
-  <button
-    onclick="login()"
-    style="
-      padding:16px;
-      border:none;
-      border-radius:14px;
-      background:#2563eb;
-      color:white;
-      font-size:15px;
-      font-weight:700;
-      cursor:pointer;
-    "
-  >
-    Login
-  </button>
+    const modal =
+    document.getElementById(
+      'authModal'
+    );
 
-  <button
-    onclick="signUp()"
-    style="
-      padding:16px;
-      border:none;
-      border-radius:14px;
-      background:#10b981;
-      color:white;
-      font-size:15px;
-      font-weight:700;
-      cursor:pointer;
-    "
-  >
-    Signup
-  </button>
+    if(modal){
 
-</div>
-        <button
-          onclick="alert('Use Login button on dashboard')"
-          style="
-            background:#2563eb;
-            color:white;
-            border:none;
-            padding:16px 26px;
-            border-radius:14px;
-            cursor:pointer;
-            font-size:15px;
-            font-weight:700;
-          "
-        >
+      modal.style.display='flex';
 
-          Login Required
-
-        </button>
-
-      </div>
-
-    `;
+    }
 
   }
 
 }
 
-// =====================================
-// RUN SESSION CHECK
-// =====================================
+// ======================================
+// RUN ON LOAD
+// ======================================
 
-window.addEventListener('load', async () => {
-
-  const {
-    data: { user }
-  } = await supabaseClient.auth.getUser();
-
-  if(!user){
-
-    document.body.innerHTML = `
-
-      <div style="
-        background:#050816;
-        color:white;
-        height:100vh;
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        flex-direction:column;
-        font-family:Inter,sans-serif;
-      ">
-
-        <h1 style="
-          margin-bottom:20px;
-          font-size:42px;
-        ">
-          🔒 Login Required
-        </h1>
-
-        <p style="
-          color:#94a3b8;
-          margin-bottom:30px;
-        ">
-          Please login to access CARRA OS
-        </p>
-
-      </div>
-
-    `;
-
-  }
-
-});
+window.addEventListener(
+  'load',
+  checkSession
+);

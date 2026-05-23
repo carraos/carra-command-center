@@ -12,9 +12,7 @@
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-
-  <script src="auth.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
 
@@ -62,30 +60,6 @@
       margin-top:8px;
       color:#94a3b8;
       font-size:15px;
-    }
-
-    .auth-buttons{
-      display:flex;
-      gap:10px;
-      margin-top:20px;
-      flex-wrap:wrap;
-    }
-
-    .auth-btn{
-
-      padding:12px 18px;
-      border:none;
-      border-radius:14px;
-      cursor:pointer;
-      font-weight:600;
-      color:white;
-      background:rgba(255,255,255,0.08);
-      backdrop-filter:blur(12px);
-
-    }
-
-    .logout-btn{
-      background:#ef4444;
     }
 
     .stats{
@@ -365,94 +339,52 @@
       color:white;
     }
 
-    .btn:hover{
-      transform:translateY(-1px);
-      opacity:0.92;
-    }
+    #authModal{
 
-    .empty-state{
-      text-align:center;
-      padding:70px 20px;
-      color:#94a3b8;
-    }
+      position:fixed;
+      inset:0;
 
-    .loading{
-      text-align:center;
-      padding:50px;
-      color:#94a3b8;
-    }
+      background:rgba(2,6,23,0.92);
 
-    #auth-modal{
+      backdrop-filter:blur(12px);
 
       display:none;
-      position:fixed;
 
-      top:0;
-      left:0;
-
-      width:100%;
-      height:100%;
-
-      background:rgba(0,0,0,0.75);
-
-      backdrop-filter:blur(10px);
-
-      justify-content:center;
       align-items:center;
+      justify-content:center;
 
       z-index:9999;
 
+      padding:20px;
+
     }
 
-    .auth-box{
+    .auth-card{
 
-      width:400px;
+      width:100%;
+      max-width:420px;
 
-      background:#131a2e;
-
-      border-radius:24px;
-
-      padding:30px;
+      background:rgba(15,23,42,0.95);
 
       border:1px solid rgba(255,255,255,0.08);
 
-    }
+      border-radius:28px;
 
-    .auth-box h2{
-      margin-bottom:20px;
-    }
+      padding:35px;
 
-    @media(max-width:1100px){
-
-      .grid{
-        grid-template-columns:1fr;
-      }
+      box-shadow:
+      0 20px 60px rgba(0,0,0,0.45);
 
     }
 
-    @media(max-width:768px){
+    .auth-card h1{
+      font-size:34px;
+      margin-bottom:10px;
+    }
 
-      body{
-        padding:20px;
-      }
-
-      .topbar{
-        flex-direction:column;
-        align-items:flex-start;
-      }
-
-      .logo-section h1{
-        font-size:34px;
-      }
-
-      .task-actions{
-        flex-direction:column;
-      }
-
-      .btn{
-        width:100%;
-      }
-
+    .auth-card p{
+      color:#94a3b8;
+      margin-bottom:25px;
     }
 
   </style>
@@ -461,583 +393,423 @@
 
 <body>
 
-  <div id="auth-modal">
+<div id="authModal">
 
-    <div class="auth-box">
+  <div class="auth-card">
 
-      <h2 id="auth-title">
-        Login
-      </h2>
+    <h1>🚀 CARRA OS</h1>
+
+    <p>
+      Secure Login Access
+    </p>
+
+    <input
+      type="email"
+      id="auth_email"
+      placeholder="Email Address"
+    />
+
+    <input
+      type="password"
+      id="auth_password"
+      placeholder="Password"
+    />
+
+    <button
+      class="create-btn"
+      onclick="login()">
+
+      Login
+
+    </button>
+
+    <button
+      class="create-btn"
+      style="margin-top:12px"
+      onclick="signUp()">
+
+      Create Account
+
+    </button>
+
+  </div>
+
+</div>
+
+<div class="container">
+
+  <div class="topbar">
+
+    <div class="logo-section">
+
+      <h1>
+        🚀 CARRA Command Center
+      </h1>
+
+      <p>
+        Premium AI Powered Team Task Management System
+      </p>
+
+    </div>
+
+    <div class="stats">
+
+      <div class="stat-box">
+        <h3 id="totalTasks">0</h3>
+        <span>Total Tasks</span>
+      </div>
+
+      <div class="stat-box">
+        <h3 id="pendingTasks">0</h3>
+        <span>Pending</span>
+      </div>
+
+      <div class="stat-box">
+        <h3 id="completedTasks">0</h3>
+        <span>Completed</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="grid">
+
+    <div class="card">
+
+      <h2>Create New Task</h2>
 
       <input
-        type="email"
-        id="login_email"
-        placeholder="Email"
+        type="text"
+        id="task_name"
+        placeholder="Task Name"
       />
 
       <input
-        type="password"
-        id="login_password"
-        placeholder="Password"
+        type="text"
+        id="assigned_to"
+        placeholder="Assigned To"
       />
 
       <input
-        type="email"
-        id="signup_email"
-        placeholder="Signup Email"
-        style="display:none;"
+        type="text"
+        id="assigned_phone"
+        placeholder="Phone Number"
       />
 
-      <input
-        type="password"
-        id="signup_password"
-        placeholder="Signup Password"
-        style="display:none;"
-      />
+      <select id="priority">
+
+        <option value="High">
+          High Priority
+        </option>
+
+        <option value="Medium">
+          Medium Priority
+        </option>
+
+        <option value="Low">
+          Low Priority
+        </option>
+
+      </select>
 
       <button
         class="create-btn"
-        id="login-btn"
-        onclick="login()">
+        onclick="createTask()">
 
-        Login
-
-      </button>
-
-      <button
-        class="create-btn"
-        id="signup-btn"
-        onclick="signUp()"
-        style="
-        margin-top:10px;
-        display:none;
-        ">
-
-        Create Account
+        Create Task
 
       </button>
 
       <button
         class="btn delete-btn"
-        onclick="closeAuth()"
         style="
         width:100%;
-        margin-top:10px;
-        ">
+        margin-top:15px;
+        "
+        onclick="logout()">
 
-        Close
+        Logout
 
       </button>
 
     </div>
 
-  </div>
+    <div class="card">
 
-  <div class="container">
+      <h2>All Tasks</h2>
 
-    <div class="topbar">
-
-      <div class="logo-section">
-
-        <h1>
-          🚀 CARRA Command Center
-        </h1>
-
-        <p>
-          Premium AI Powered Team Task Management System
-        </p>
-
-        <div class="auth-buttons">
-
-          <button
-            class="auth-btn"
-            onclick="showLogin()">
-
-            Login
-
-          </button>
-
-          <button
-            class="auth-btn"
-            onclick="showSignup()">
-
-            Signup
-
-          </button>
-
-          <button
-            class="auth-btn logout-btn"
-            onclick="logout()">
-
-            Logout
-
-          </button>
-
-        </div>
-
-      </div>
-
-      <div class="stats">
-
-        <div class="stat-box">
-          <h3 id="totalTasks">0</h3>
-          <span>Total Tasks</span>
-        </div>
-
-        <div class="stat-box">
-          <h3 id="pendingTasks">0</h3>
-          <span>Pending</span>
-        </div>
-
-        <div class="stat-box">
-          <h3 id="completedTasks">0</h3>
-          <span>Completed</span>
-        </div>
+      <div
+        id="tasks"
+        class="tasks-wrapper">
 
       </div>
 
     </div>
 
-    <div class="grid">
+  </div>
 
-      <div class="card">
+</div>
 
-        <h2>Create New Task</h2>
+<script src="auth.js"></script>
 
-        <input
-          type="text"
-          id="task_name"
-          placeholder="Task Name"
-        />
+<script>
 
-        <input
-          type="text"
-          id="assigned_to"
-          placeholder="Assigned To"
-        />
+const API_URL =
+'https://carra-command-center.onrender.com';
 
-        <input
-          type="text"
-          id="assigned_phone"
-          placeholder="Phone Number"
-        />
+// =======================================
+// AUTH CHECK
+// =======================================
 
-        <select id="priority">
+const currentUser =
+localStorage.getItem('carra_user');
 
-          <option value="High">
-            High Priority
-          </option>
+if(!currentUser){
 
-          <option value="Medium">
-            Medium Priority
-          </option>
+  document.getElementById('authModal')
+  .style.display='flex';
 
-          <option value="Low">
-            Low Priority
-          </option>
+}
 
-        </select>
+// =======================================
+// LOAD TASKS
+// =======================================
 
-        <button
-          class="create-btn"
-          onclick="createTask()">
+async function loadTasks(){
 
-          Create Task
+  try{
 
-        </button>
+    const res =
+    await fetch(`${API_URL}/tasks`);
 
-      </div>
+    const result =
+    await res.json();
 
-      <div class="card">
+    const tasks =
+    result.data || [];
 
-        <h2>All Tasks</h2>
+    document.getElementById('totalTasks')
+    .innerText=tasks.length;
 
-        <div
-          id="tasks"
-          class="tasks-wrapper">
+    document.getElementById('pendingTasks')
+    .innerText=
+    tasks.filter(
+      t=>t.status !== 'Completed'
+    ).length;
 
-          <div class="loading">
-            Loading Tasks...
+    document.getElementById('completedTasks')
+    .innerText=
+    tasks.filter(
+      t=>t.status === 'Completed'
+    ).length;
+
+    const tasksDiv =
+    document.getElementById('tasks');
+
+    tasksDiv.innerHTML='';
+
+    tasks.forEach(task=>{
+
+      const priorityClass=
+      task.priority==='High'
+      ? 'high'
+      : task.priority==='Medium'
+      ? 'medium'
+      : 'low';
+
+      tasksDiv.innerHTML += `
+
+      <div class="task">
+
+        <div class="task-header">
+
+          <div>
+
+            <div class="task-title">
+              ${task.task_name}
+            </div>
+
+            <div class="task-code">
+              ${task.task_code}
+            </div>
+
+          </div>
+
+          <div class="priority ${priorityClass}">
+            ${task.priority}
           </div>
 
         </div>
 
+        <div class="task-grid">
+
+          <div class="info-box">
+
+            <div class="info-label">
+              Assigned To
+            </div>
+
+            <div class="info-value">
+              ${task.assigned_to}
+            </div>
+
+          </div>
+
+          <div class="info-box">
+
+            <div class="info-label">
+              Phone Number
+            </div>
+
+            <div class="info-value">
+              ${task.assigned_phone}
+            </div>
+
+          </div>
+
+          <div class="info-box">
+
+            <div class="info-label">
+              Status
+            </div>
+
+            <div class="info-value
+            ${task.status==='Completed'
+            ? 'completed'
+            : 'pending'}">
+
+              ${task.status}
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="task-actions">
+
+          <button
+            class="btn complete-btn"
+            onclick="markCompleted('${task.id}')">
+
+            ✅ Complete
+
+          </button>
+
+          <button
+            class="btn delete-btn"
+            onclick="deleteTask('${task.id}')">
+
+            🗑 Delete
+
+          </button>
+
+        </div>
+
       </div>
 
-    </div>
+      `;
 
-  </div>
+    });
 
-  <script>
+  }catch(err){
 
-    const API_URL =
-    'https://carra-command-center.onrender.com';
+    console.error(err);
 
-    function showLogin(){
+  }
 
-      document.getElementById('auth-modal')
-      .style.display='flex';
+}
 
-      document.getElementById('auth-title')
-      .innerText='Login';
+// =======================================
+// CREATE TASK
+// =======================================
 
-      document.getElementById('login_email')
-      .style.display='block';
+async function createTask(){
 
-      document.getElementById('login_password')
-      .style.display='block';
+  const task={
 
-      document.getElementById('login-btn')
-      .style.display='block';
+    task_code:
+    'TASK-'+
+    Math.floor(Math.random()*100000),
 
-      document.getElementById('signup_email')
-      .style.display='none';
+    task_name:
+    document.getElementById('task_name').value,
 
-      document.getElementById('signup_password')
-      .style.display='none';
+    assigned_to:
+    document.getElementById('assigned_to').value,
 
-      document.getElementById('signup-btn')
-      .style.display='none';
+    assigned_phone:
+    document.getElementById('assigned_phone').value,
 
-    }
+    priority:
+    document.getElementById('priority').value,
 
-    function showSignup(){
+    status:'Pending',
 
-      document.getElementById('auth-modal')
-      .style.display='flex';
+    frequency:'once'
 
-      document.getElementById('auth-title')
-      .innerText='Create Account';
+  };
 
-      document.getElementById('login_email')
-      .style.display='none';
+  await fetch(`${API_URL}/tasks`,{
 
-      document.getElementById('login_password')
-      .style.display='none';
+    method:'POST',
 
-      document.getElementById('login-btn')
-      .style.display='none';
+    headers:{
+      'Content-Type':'application/json'
+    },
 
-      document.getElementById('signup_email')
-      .style.display='block';
+    body:JSON.stringify(task)
 
-      document.getElementById('signup_password')
-      .style.display='block';
+  });
 
-      document.getElementById('signup-btn')
-      .style.display='block';
+  loadTasks();
 
-    }
+}
 
-    function closeAuth(){
+// =======================================
+// COMPLETE TASK
+// =======================================
 
-      document.getElementById('auth-modal')
-      .style.display='none';
+async function markCompleted(id){
 
-    }
+  await fetch(`${API_URL}/tasks/${id}`,{
 
-    async function loadTasks(){
+    method:'PUT',
 
-      try{
+    headers:{
+      'Content-Type':'application/json'
+    },
 
-        const res =
-        await fetch(`${API_URL}/tasks`);
+    body:JSON.stringify({
+      status:'Completed'
+    })
 
-        const result =
-        await res.json();
+  });
 
-        const tasksDiv =
-        document.getElementById('tasks');
+  loadTasks();
 
-        tasksDiv.innerHTML='';
+}
 
-        const tasks =
-        result.data || [];
+// =======================================
+// DELETE TASK
+// =======================================
 
-        document.getElementById('totalTasks')
-        .innerText=tasks.length;
+async function deleteTask(id){
 
-        document.getElementById('pendingTasks')
-        .innerText=
-        tasks.filter(
-          t=>t.status !== 'Completed'
-        ).length;
+  await fetch(`${API_URL}/tasks/${id}`,{
 
-        document.getElementById('completedTasks')
-        .innerText=
-        tasks.filter(
-          t=>t.status === 'Completed'
-        ).length;
+    method:'DELETE'
 
-        if(tasks.length===0){
+  });
 
-          tasksDiv.innerHTML=`
+  loadTasks();
 
-            <div class="empty-state">
+}
 
-              <div style="font-size:70px">
-                📭
-              </div>
+loadTasks();
 
-              <h3>No Tasks Available</h3>
+</script>
 
-            </div>
-
-          `;
-
-          return;
-
-        }
-
-        tasks.forEach(task=>{
-
-          const priorityClass=
-
-          task.priority==='High'
-          ? 'high'
-
-          : task.priority==='Medium'
-          ? 'medium'
-
-          : 'low';
-
-          tasksDiv.innerHTML += `
-
-            <div class="task">
-
-              <div class="task-header">
-
-                <div>
-
-                  <div class="task-title">
-                    ${task.task_name}
-                  </div>
-
-                  <div class="task-code">
-                    ${task.task_code}
-                  </div>
-
-                </div>
-
-                <div class="priority ${priorityClass}">
-                  ${task.priority}
-                </div>
-
-              </div>
-
-              <div class="task-grid">
-
-                <div class="info-box">
-
-                  <div class="info-label">
-                    Assigned To
-                  </div>
-
-                  <div class="info-value">
-                    ${task.assigned_to}
-                  </div>
-
-                </div>
-
-                <div class="info-box">
-
-                  <div class="info-label">
-                    Phone Number
-                  </div>
-
-                  <div class="info-value">
-                    ${task.assigned_phone}
-                  </div>
-
-                </div>
-
-                <div class="info-box">
-
-                  <div class="info-label">
-                    Status
-                  </div>
-
-                  <div class="info-value
-                  ${task.status==='Completed'
-                  ? 'completed'
-                  : 'pending'}">
-
-                    ${task.status}
-
-                  </div>
-
-                </div>
-
-              </div>
-
-              <div class="task-actions">
-
-                <button
-                  class="btn complete-btn"
-                  onclick="markCompleted('${task.id}')">
-
-                  ✅ Complete
-
-                </button>
-
-                <button
-                  class="btn delete-btn"
-                  onclick="deleteTask('${task.id}')">
-
-                  🗑 Delete
-
-                </button>
-
-              </div>
-
-            </div>
-
-          `;
-
-        });
-
-      }catch(err){
-
-        console.error(err);
-
-      }
-
-    }
-
-    async function createTask(){
-
-      const taskName=
-      document.getElementById('task_name').value;
-
-      const assignedTo=
-      document.getElementById('assigned_to').value;
-
-      const assignedPhone=
-      document.getElementById('assigned_phone').value;
-
-      const priority=
-      document.getElementById('priority').value;
-
-      if(
-        !taskName ||
-        !assignedTo ||
-        !assignedPhone
-      ){
-
-        alert('Please fill all fields');
-
-        return;
-
-      }
-
-      const task={
-
-        task_code:
-        'TASK-'+
-        Math.floor(Math.random()*100000),
-
-        task_name:taskName,
-
-        assigned_to:assignedTo,
-
-        assigned_phone:assignedPhone,
-
-        priority:priority,
-
-        status:'Pending',
-
-        frequency:'once'
-
-      };
-
-      try{
-
-        await fetch(`${API_URL}/tasks`,{
-
-          method:'POST',
-
-          headers:{
-            'Content-Type':'application/json'
-          },
-
-          body:JSON.stringify(task)
-
-        });
-
-        document.getElementById('task_name').value='';
-
-        document.getElementById('assigned_to').value='';
-
-        document.getElementById('assigned_phone').value='';
-
-        loadTasks();
-
-      }catch(err){
-
-        console.error(err);
-
-      }
-
-    }
-
-    async function markCompleted(id){
-
-      try{
-
-        await fetch(`${API_URL}/tasks/${id}`,{
-
-          method:'PUT',
-
-          headers:{
-            'Content-Type':'application/json'
-          },
-
-          body:JSON.stringify({
-            status:'Completed'
-          })
-
-        });
-
-        loadTasks();
-
-      }catch(err){
-
-        console.error(err);
-
-      }
-
-    }
-
-    async function deleteTask(id){
-
-      const confirmDelete=
-      confirm('Delete this task?');
-
-      if(!confirmDelete) return;
-
-      try{
-
-        await fetch(`${API_URL}/tasks/${id}`,{
-
-          method:'DELETE'
-
-        });
-
-        loadTasks();
-
-      }catch(err){
-
-        console.error(err);
-
-      }
-
-    }
-
-    loadTasks();
-
-  </script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script src="auth.js"></script>
 </body>
 </html>
