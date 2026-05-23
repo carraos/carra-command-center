@@ -203,6 +203,22 @@ padding:24px;
 position:relative;
 overflow:hidden;
 
+animation:fadeIn 0.3s ease;
+
+}
+
+@keyframes fadeIn{
+
+from{
+opacity:0;
+transform:translateY(10px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
 }
 
 .task::before{
@@ -648,7 +664,7 @@ JSON.stringify(data.user)
 document.getElementById('authModal')
 .style.display='none';
 
-loadTasks();
+await loadTasks();
 
 }
 
@@ -682,7 +698,7 @@ document.getElementById('authModal')
 document.getElementById('authModal')
 .style.display='none';
 
-loadTasks();
+await loadTasks();
 
 }
 
@@ -714,7 +730,6 @@ ascending:false
 if(error){
 
 console.error(error);
-alert(error.message);
 return;
 
 }
@@ -936,7 +951,7 @@ document.getElementById('task_name').value='';
 document.getElementById('assigned_to').value='';
 document.getElementById('assigned_phone').value='';
 
-loadTasks();
+await loadTasks();
 
 }
 
@@ -953,7 +968,7 @@ status:'Completed'
 })
 .eq('id',id);
 
-loadTasks();
+await loadTasks();
 
 }
 
@@ -968,7 +983,7 @@ await supabaseClient
 .delete()
 .eq('id',id);
 
-loadTasks();
+await loadTasks();
 
 }
 
