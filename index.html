@@ -41,7 +41,7 @@ padding:40px;
 }
 
 .container{
-max-width:1500px;
+max-width:1700px;
 margin:auto;
 }
 
@@ -188,236 +188,6 @@ box-shadow:
 margin-bottom:20px;
 }
 
-.tasks-wrapper{
-display:flex;
-flex-direction:column;
-gap:18px;
-}
-
-.task{
-
-background:
-linear-gradient(
-145deg,
-rgba(30,41,59,0.95),
-rgba(15,23,42,0.95)
-);
-
-border:1px solid rgba(255,255,255,0.06);
-
-border-radius:22px;
-padding:24px;
-
-position:relative;
-overflow:hidden;
-
-animation:fadeIn 0.3s ease;
-
-}
-
-.overdue{
-border:1px solid #ef4444 !important;
-box-shadow:0 0 20px rgba(239,68,68,0.2);
-}
-
-@keyframes fadeIn{
-
-from{
-opacity:0;
-transform:translateY(10px);
-}
-
-to{
-opacity:1;
-transform:translateY(0);
-}
-
-}
-
-.task::before{
-
-content:'';
-
-position:absolute;
-
-top:0;
-left:0;
-
-width:5px;
-height:100%;
-
-background:#3b82f6;
-
-}
-
-.task-header{
-display:flex;
-justify-content:space-between;
-gap:15px;
-align-items:flex-start;
-flex-wrap:wrap;
-margin-bottom:15px;
-}
-
-.task-title{
-font-size:24px;
-font-weight:700;
-}
-
-.task-code{
-color:#64748b;
-font-size:13px;
-margin-top:5px;
-}
-
-.task-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-gap:15px;
-margin-top:20px;
-}
-
-.info-box{
-background:rgba(255,255,255,0.03);
-border-radius:16px;
-padding:16px;
-}
-
-.info-label{
-color:#94a3b8;
-font-size:12px;
-margin-bottom:8px;
-text-transform:uppercase;
-letter-spacing:1px;
-}
-
-.info-value{
-font-size:15px;
-font-weight:600;
-}
-
-.priority{
-
-display:inline-flex;
-align-items:center;
-justify-content:center;
-
-padding:8px 14px;
-
-border-radius:999px;
-
-font-size:12px;
-font-weight:700;
-
-}
-
-.high{
-background:rgba(239,68,68,0.18);
-color:#f87171;
-}
-
-.medium{
-background:rgba(245,158,11,0.18);
-color:#fbbf24;
-}
-
-.low{
-background:rgba(16,185,129,0.18);
-color:#34d399;
-}
-
-.completed{
-color:#10b981;
-font-weight:700;
-}
-
-.pending{
-color:#f59e0b;
-font-weight:700;
-}
-
-.task-actions{
-display:flex;
-gap:12px;
-margin-top:24px;
-flex-wrap:wrap;
-}
-
-.btn{
-
-border:none;
-border-radius:14px;
-
-padding:13px 18px;
-
-font-size:14px;
-font-weight:600;
-
-cursor:pointer;
-
-}
-
-.complete-btn{
-background:#10b981;
-color:white;
-}
-
-.delete-btn{
-background:#ef4444;
-color:white;
-}
-
-#authModal{
-
-position:fixed;
-inset:0;
-
-background:rgba(2,6,23,0.92);
-
-backdrop-filter:blur(12px);
-
-display:none;
-
-align-items:center;
-justify-content:center;
-
-z-index:9999;
-
-padding:20px;
-
-}
-
-.auth-card{
-
-width:100%;
-max-width:420px;
-
-background:rgba(15,23,42,0.95);
-
-border:1px solid rgba(255,255,255,0.08);
-
-border-radius:28px;
-
-padding:35px;
-
-}
-
-.auth-card h1{
-font-size:34px;
-margin-bottom:10px;
-}
-
-.auth-card p{
-color:#94a3b8;
-margin-bottom:25px;
-}
-
-.empty-state{
-text-align:center;
-padding:60px;
-color:#94a3b8;
-}
-
 .filters{
 display:flex;
 gap:15px;
@@ -496,34 +266,6 @@ overflow:hidden;
 
 }
 
-.flatpickr-months{
-
-background:#111827 !important;
-
-padding:10px 0;
-
-}
-
-.flatpickr-current-month{
-
-color:white !important;
-
-font-weight:700 !important;
-
-}
-
-.flatpickr-weekday{
-color:#94a3b8 !important;
-}
-
-.flatpickr-day{
-
-color:white !important;
-
-border-radius:12px !important;
-
-}
-
 .flatpickr-day.selected{
 
 background:#2563eb !important;
@@ -532,29 +274,266 @@ border-color:#2563eb !important;
 
 }
 
-.flatpickr-day:hover{
-
-background:#1e293b !important;
-
-}
-
-.flatpickr-time{
-
-background:#111827 !important;
-
-border-top:1px solid rgba(255,255,255,0.05) !important;
-
+.flatpickr-day{
+color:white !important;
 }
 
 .flatpickr-time input{
-
 color:white !important;
+}
 
-font-weight:600;
+.kanban-board{
+
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:20px;
 
 }
 
-@media(max-width:900px){
+.kanban-column{
+
+background:
+rgba(255,255,255,0.03);
+
+border:
+1px solid rgba(255,255,255,0.08);
+
+border-radius:22px;
+
+padding:18px;
+
+min-height:650px;
+
+backdrop-filter:blur(12px);
+
+}
+
+.kanban-title{
+
+font-size:18px;
+font-weight:700;
+
+margin-bottom:20px;
+
+color:white;
+
+}
+
+.kanban-tasks{
+
+display:flex;
+flex-direction:column;
+gap:18px;
+
+min-height:500px;
+
+}
+
+.task{
+
+background:
+linear-gradient(
+145deg,
+rgba(30,41,59,0.95),
+rgba(15,23,42,0.95)
+);
+
+border:1px solid rgba(255,255,255,0.06);
+
+border-radius:22px;
+padding:24px;
+
+position:relative;
+overflow:hidden;
+
+animation:fadeIn 0.3s ease;
+
+}
+
+.overdue{
+border:1px solid #ef4444 !important;
+box-shadow:0 0 20px rgba(239,68,68,0.2);
+}
+
+.task::before{
+
+content:'';
+
+position:absolute;
+
+top:0;
+left:0;
+
+width:5px;
+height:100%;
+
+background:#3b82f6;
+
+}
+
+.task-header{
+display:flex;
+justify-content:space-between;
+gap:15px;
+align-items:flex-start;
+flex-wrap:wrap;
+margin-bottom:15px;
+}
+
+.task-title{
+font-size:20px;
+font-weight:700;
+}
+
+.task-code{
+color:#64748b;
+font-size:13px;
+margin-top:5px;
+}
+
+.task-grid{
+display:grid;
+grid-template-columns:1fr;
+gap:12px;
+margin-top:20px;
+}
+
+.info-box{
+background:rgba(255,255,255,0.03);
+border-radius:16px;
+padding:16px;
+}
+
+.info-label{
+color:#94a3b8;
+font-size:12px;
+margin-bottom:8px;
+text-transform:uppercase;
+letter-spacing:1px;
+}
+
+.info-value{
+font-size:14px;
+font-weight:600;
+}
+
+.priority{
+
+display:inline-flex;
+align-items:center;
+justify-content:center;
+
+padding:8px 14px;
+
+border-radius:999px;
+
+font-size:12px;
+font-weight:700;
+
+}
+
+.high{
+background:rgba(239,68,68,0.18);
+color:#f87171;
+}
+
+.medium{
+background:rgba(245,158,11,0.18);
+color:#fbbf24;
+}
+
+.low{
+background:rgba(16,185,129,0.18);
+color:#34d399;
+}
+
+.completed{
+color:#10b981;
+font-weight:700;
+}
+
+.pending{
+color:#f59e0b;
+font-weight:700;
+}
+
+.task-actions{
+display:flex;
+gap:12px;
+margin-top:24px;
+flex-wrap:wrap;
+}
+
+.btn{
+
+border:none;
+border-radius:14px;
+
+padding:12px 16px;
+
+font-size:13px;
+font-weight:600;
+
+cursor:pointer;
+
+}
+
+.complete-btn{
+background:#10b981;
+color:white;
+}
+
+.delete-btn{
+background:#ef4444;
+color:white;
+}
+
+#authModal{
+
+position:fixed;
+inset:0;
+
+background:rgba(2,6,23,0.92);
+
+backdrop-filter:blur(12px);
+
+display:none;
+
+align-items:center;
+justify-content:center;
+
+z-index:9999;
+
+padding:20px;
+
+}
+
+.auth-card{
+
+width:100%;
+max-width:420px;
+
+background:rgba(15,23,42,0.95);
+
+border:1px solid rgba(255,255,255,0.08);
+
+border-radius:28px;
+
+padding:35px;
+
+}
+
+.empty-state{
+text-align:center;
+padding:60px;
+color:#94a3b8;
+}
+
+@media(max-width:1200px){
+
+.kanban-board{
+grid-template-columns:1fr;
+}
 
 .grid{
 grid-template-columns:1fr;
@@ -562,10 +541,6 @@ grid-template-columns:1fr;
 
 body{
 padding:20px;
-}
-
-.filters{
-flex-direction:column;
 }
 
 }
@@ -582,37 +557,18 @@ flex-direction:column;
 
 <h1>🚀 CARRA OS</h1>
 
-<p>
-Secure Login Access
-</p>
+<p>Secure Login Access</p>
 
-<input
-type="email"
-id="auth_email"
-placeholder="Email Address"
-/>
+<input type="email" id="auth_email" placeholder="Email Address"/>
 
-<input
-type="password"
-id="auth_password"
-placeholder="Password"
-/>
+<input type="password" id="auth_password" placeholder="Password"/>
 
-<button
-class="create-btn"
-onclick="login()">
-
+<button class="create-btn" onclick="login()">
 Login
-
 </button>
 
-<button
-class="create-btn"
-style="margin-top:12px"
-onclick="signUp()">
-
+<button class="create-btn" style="margin-top:12px" onclick="signUp()">
 Create Account
-
 </button>
 
 </div>
@@ -625,13 +581,9 @@ Create Account
 
 <div class="logo-section">
 
-<h1>
-🚀 CARRA Command Center
-</h1>
+<h1>🚀 CARRA Command Center</h1>
 
-<p>
-Premium AI Powered Team Task Management System
-</p>
+<p>Premium AI Powered Team Task Management System</p>
 
 </div>
 
@@ -662,23 +614,11 @@ Premium AI Powered Team Task Management System
 
 <h2>Create New Task</h2>
 
-<input
-type="text"
-id="task_name"
-placeholder="Task Name"
-/>
+<input type="text" id="task_name" placeholder="Task Name"/>
 
-<input
-type="text"
-id="assigned_to"
-placeholder="Assigned To"
-/>
+<input type="text" id="assigned_to" placeholder="Assigned To"/>
 
-<input
-type="text"
-id="assigned_phone"
-placeholder="Phone Number"
-/>
+<input type="text" id="assigned_phone" placeholder="Phone Number"/>
 
 <div class="date-wrapper">
 
@@ -697,54 +637,28 @@ placeholder="Select Due Date & Time"
 
 <select id="task_status">
 
-<option value="Pending">
-Pending
-</option>
-
-<option value="In Progress">
-In Progress
-</option>
-
-<option value="Waiting">
-Waiting
-</option>
-
-<option value="Completed">
-Completed
-</option>
+<option value="Pending">Pending</option>
+<option value="In Progress">In Progress</option>
+<option value="Waiting">Waiting</option>
+<option value="Completed">Completed</option>
 
 </select>
 
 <select id="priority">
 
-<option value="High">
-High Priority
-</option>
-
-<option value="Medium">
-Medium Priority
-</option>
-
-<option value="Low">
-Low Priority
-</option>
+<option value="High">High Priority</option>
+<option value="Medium">Medium Priority</option>
+<option value="Low">Low Priority</option>
 
 </select>
 
-<button
-class="create-btn"
-onclick="createTask()">
-
+<button class="create-btn" onclick="createTask()">
 Create Task
-
 </button>
 
 <button
 class="btn delete-btn"
-style="
-width:100%;
-margin-top:15px;
-"
+style="width:100%;margin-top:15px;"
 onclick="logout()">
 
 Logout
@@ -769,53 +683,46 @@ onkeyup="loadTasks()"
 
 <select id="filterStatus" onchange="loadTasks()">
 
-<option value="">
-All Status
-</option>
-
-<option value="Pending">
-Pending
-</option>
-
-<option value="In Progress">
-In Progress
-</option>
-
-<option value="Waiting">
-Waiting
-</option>
-
-<option value="Completed">
-Completed
-</option>
+<option value="">All Status</option>
+<option value="Pending">Pending</option>
+<option value="In Progress">In Progress</option>
+<option value="Waiting">Waiting</option>
+<option value="Completed">Completed</option>
 
 </select>
 
 <select id="filterPriority" onchange="loadTasks()">
 
-<option value="">
-All Priority
-</option>
-
-<option value="High">
-High
-</option>
-
-<option value="Medium">
-Medium
-</option>
-
-<option value="Low">
-Low
-</option>
+<option value="">All Priority</option>
+<option value="High">High</option>
+<option value="Medium">Medium</option>
+<option value="Low">Low</option>
 
 </select>
 
 </div>
 
-<div
-id="tasks"
-class="tasks-wrapper">
+<div class="kanban-board">
+
+<div class="kanban-column">
+<h3 class="kanban-title">📌 Pending</h3>
+<div id="Pending" class="kanban-tasks"></div>
+</div>
+
+<div class="kanban-column">
+<h3 class="kanban-title">🚀 In Progress</h3>
+<div id="In Progress" class="kanban-tasks"></div>
+</div>
+
+<div class="kanban-column">
+<h3 class="kanban-title">⏳ Waiting</h3>
+<div id="Waiting" class="kanban-tasks"></div>
+</div>
+
+<div class="kanban-column">
+<h3 class="kanban-title">✅ Completed</h3>
+<div id="Completed" class="kanban-tasks"></div>
+</div>
 
 </div>
 
@@ -834,17 +741,12 @@ const supabaseClient = supabase.createClient(
 
 flatpickr("#due_date", {
 
-enableTime: true,
-
-dateFormat: "Y-m-d h:i K",
-
-time_24hr: false,
-
-minDate: "today",
-
-minuteIncrement: 5,
-
-disableMobile: true
+enableTime:true,
+dateFormat:"Y-m-d h:i K",
+time_24hr:false,
+minDate:"today",
+minuteIncrement:5,
+disableMobile:true
 
 });
 
@@ -1029,14 +931,14 @@ task.priority === filterPriority
 
 updateStats(filteredTasks);
 
-const tasksDiv =
-document.getElementById('tasks');
-
-tasksDiv.innerHTML='';
+document.getElementById('Pending').innerHTML='';
+document.getElementById('In Progress').innerHTML='';
+document.getElementById('Waiting').innerHTML='';
+document.getElementById('Completed').innerHTML='';
 
 if(filteredTasks.length===0){
 
-tasksDiv.innerHTML=`
+document.getElementById('Pending').innerHTML=`
 
 <div class="empty-state">
 
@@ -1066,7 +968,7 @@ task.due_date &&
 new Date(task.due_date) < new Date() &&
 task.task_status !== 'Completed';
 
-tasksDiv.innerHTML += `
+document.getElementById(task.task_status).innerHTML += `
 
 <div class="task ${isOverdue ? 'overdue' : ''}">
 
@@ -1112,23 +1014,6 @@ Phone Number
 
 <div class="info-value">
 ${task.assigned_phone}
-</div>
-
-</div>
-
-<div class="info-box">
-
-<div class="info-label">
-Status
-</div>
-
-<div class="info-value
-${task.task_status==='Completed'
-? 'completed'
-: 'pending'}">
-
-${task.task_status}
-
 </div>
 
 </div>
