@@ -425,6 +425,79 @@ flex-wrap:wrap;
 margin-bottom:0;
 }
 
+.date-wrapper{
+margin-bottom:18px;
+}
+
+.date-label{
+
+display:block;
+
+margin-bottom:10px;
+
+font-size:13px;
+font-weight:600;
+
+color:#94a3b8;
+
+letter-spacing:0.5px;
+
+}
+
+.modern-date{
+
+width:100%;
+
+padding:16px;
+
+border:none;
+border-radius:16px;
+
+background:#111827;
+color:white;
+
+font-size:15px;
+
+outline:none;
+
+border:1px solid rgba(255,255,255,0.08);
+
+transition:0.25s;
+
+color-scheme:dark;
+
+cursor:pointer;
+
+}
+
+.modern-date:focus{
+
+border-color:#3b82f6;
+
+box-shadow:
+0 0 0 4px rgba(59,130,246,0.15);
+
+}
+
+.modern-date::-webkit-calendar-picker-indicator{
+
+filter:invert(1);
+
+opacity:0.85;
+
+cursor:pointer;
+
+transition:0.2s;
+
+}
+
+.modern-date::-webkit-calendar-picker-indicator:hover{
+
+opacity:1;
+transform:scale(1.08);
+
+}
+
 @media(max-width:900px){
 
 .grid{
@@ -551,10 +624,19 @@ id="assigned_phone"
 placeholder="Phone Number"
 />
 
+<div class="date-wrapper">
+
+<label class="date-label">
+📅 Due Date & Time
+</label>
+
 <input
 type="datetime-local"
 id="due_date"
+class="modern-date"
 />
+
+</div>
 
 <select id="task_status">
 
@@ -693,10 +775,6 @@ const supabaseClient = supabase.createClient(
 'sb_publishable_ejNWxFkpYXoMrjpL0GZtuQ_PvCd1k5f'
 );
 
-// ===========================
-// AUTH
-// ===========================
-
 async function signUp(){
 
 const email =
@@ -762,10 +840,6 @@ location.reload();
 
 }
 
-// ===========================
-// CHECK USER
-// ===========================
-
 async function checkUser(){
 
 const {
@@ -788,10 +862,6 @@ await loadTasks();
 
 }
 
-// ===========================
-// UPDATE STATS
-// ===========================
-
 function updateStats(tasks){
 
 document.getElementById('totalTasks')
@@ -810,10 +880,6 @@ t=>t.task_status === 'Completed'
 ).length;
 
 }
-
-// ===========================
-// LOAD TASKS
-// ===========================
 
 async function loadTasks(){
 
@@ -1041,10 +1107,6 @@ onclick="deleteTask('${task.id}')">
 
 }
 
-// ===========================
-// CREATE TASK
-// ===========================
-
 async function createTask(){
 
 const {
@@ -1110,10 +1172,6 @@ await loadTasks();
 
 }
 
-// ===========================
-// COMPLETE TASK
-// ===========================
-
 async function markCompleted(id){
 
 await supabaseClient
@@ -1127,10 +1185,6 @@ await loadTasks();
 
 }
 
-// ===========================
-// DELETE TASK
-// ===========================
-
 async function deleteTask(id){
 
 await supabaseClient
@@ -1142,15 +1196,7 @@ await loadTasks();
 
 }
 
-// ===========================
-// INITIALIZE
-// ===========================
-
 checkUser();
-
-// ===========================
-// REALTIME
-// ===========================
 
 supabaseClient
 .channel('tasks-db')
