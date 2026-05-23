@@ -91,3 +91,75 @@ async function logout(){
   location.reload();
 
 }
+// =====================================
+// CHECK USER SESSION
+// =====================================
+
+async function checkUser(){
+
+  const {
+    data: { user }
+  } = await supabaseClient.auth.getUser();
+
+  // IF USER NOT LOGGED IN
+
+  if(!user){
+
+    document.body.innerHTML = `
+
+      <div style="
+        background:#050816;
+        color:white;
+        height:100vh;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        flex-direction:column;
+        font-family:Inter,sans-serif;
+      ">
+
+        <h1 style="
+          margin-bottom:20px;
+          font-size:42px;
+        ">
+          🔒 Login Required
+        </h1>
+
+        <p style="
+          color:#94a3b8;
+          margin-bottom:30px;
+        ">
+          Please login to access CARRA OS
+        </p>
+
+        <button
+          onclick="alert('Use Login button on dashboard')"
+          style="
+            background:#2563eb;
+            color:white;
+            border:none;
+            padding:16px 26px;
+            border-radius:14px;
+            cursor:pointer;
+            font-size:15px;
+            font-weight:700;
+          "
+        >
+
+          Login Required
+
+        </button>
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+// =====================================
+// RUN SESSION CHECK
+// =====================================
+
+checkUser();
