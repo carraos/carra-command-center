@@ -994,32 +994,39 @@ await loadTasks();
 checkUser();
 
 // ===========================
-// REALTIME
+// REALTIME FIXED
 // ===========================
 
-supabaseClient
-.channel('tasks-realtime')
+const channel =
+supabaseClient.channel('tasks-db');
 
-.on(
+channel.on(
 'postgres_changes',
 {
 event:'*',
 schema:'public',
 table:'tasks'
 },
-payload => {
+async payload => {
 
 console.log(
 'Realtime update:',
 payload
 );
 
-loadTasks();
+await loadTasks();
 
 }
-)
+);
 
-.subscribe();
+channel.subscribe((status)=>{
+
+console.log(
+'Realtime status:',
+status
+);
+
+});
 
 </script>
 
