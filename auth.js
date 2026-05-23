@@ -131,7 +131,74 @@ async function checkUser(){
         ">
           Please login to access CARRA OS
         </p>
+        <div style="
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  width:320px;
+">
 
+  <input
+    id="login_email"
+    type="email"
+    placeholder="Email"
+    style="
+      padding:16px;
+      border:none;
+      border-radius:14px;
+      background:#111827;
+      color:white;
+      font-size:15px;
+    "
+  />
+
+  <input
+    id="login_password"
+    type="password"
+    placeholder="Password"
+    style="
+      padding:16px;
+      border:none;
+      border-radius:14px;
+      background:#111827;
+      color:white;
+      font-size:15px;
+    "
+  />
+
+  <button
+    onclick="login()"
+    style="
+      padding:16px;
+      border:none;
+      border-radius:14px;
+      background:#2563eb;
+      color:white;
+      font-size:15px;
+      font-weight:700;
+      cursor:pointer;
+    "
+  >
+    Login
+  </button>
+
+  <button
+    onclick="signUp()"
+    style="
+      padding:16px;
+      border:none;
+      border-radius:14px;
+      background:#10b981;
+      color:white;
+      font-size:15px;
+      font-weight:700;
+      cursor:pointer;
+    "
+  >
+    Signup
+  </button>
+
+</div>
         <button
           onclick="alert('Use Login button on dashboard')"
           style="
