@@ -37,7 +37,7 @@ padding:40px;
 }
 
 .container{
-max-width:1400px;
+max-width:1500px;
 margin:auto;
 }
 
@@ -180,6 +180,10 @@ box-shadow:
 
 }
 
+.search-box{
+margin-bottom:20px;
+}
+
 .tasks-wrapper{
 display:flex;
 flex-direction:column;
@@ -205,6 +209,11 @@ overflow:hidden;
 
 animation:fadeIn 0.3s ease;
 
+}
+
+.overdue{
+border:1px solid #ef4444 !important;
+box-shadow:0 0 20px rgba(239,68,68,0.2);
 }
 
 @keyframes fadeIn{
@@ -405,6 +414,17 @@ padding:60px;
 color:#94a3b8;
 }
 
+.filters{
+display:flex;
+gap:15px;
+margin-bottom:20px;
+flex-wrap:wrap;
+}
+
+.filters select{
+margin-bottom:0;
+}
+
 @media(max-width:900px){
 
 .grid{
@@ -413,6 +433,10 @@ grid-template-columns:1fr;
 
 body{
 padding:20px;
+}
+
+.filters{
+flex-direction:column;
 }
 
 }
@@ -527,6 +551,31 @@ id="assigned_phone"
 placeholder="Phone Number"
 />
 
+<input
+type="datetime-local"
+id="due_date"
+/>
+
+<select id="task_status">
+
+<option value="Pending">
+Pending
+</option>
+
+<option value="In Progress">
+In Progress
+</option>
+
+<option value="Waiting">
+Waiting
+</option>
+
+<option value="Completed">
+Completed
+</option>
+
+</select>
+
 <select id="priority">
 
 <option value="High">
@@ -569,6 +618,62 @@ Logout
 
 <h2>All Tasks</h2>
 
+<input
+type="text"
+id="searchTask"
+class="search-box"
+placeholder="Search Tasks..."
+onkeyup="loadTasks()"
+/>
+
+<div class="filters">
+
+<select id="filterStatus" onchange="loadTasks()">
+
+<option value="">
+All Status
+</option>
+
+<option value="Pending">
+Pending
+</option>
+
+<option value="In Progress">
+In Progress
+</option>
+
+<option value="Waiting">
+Waiting
+</option>
+
+<option value="Completed">
+Completed
+</option>
+
+</select>
+
+<select id="filterPriority" onchange="loadTasks()">
+
+<option value="">
+All Priority
+</option>
+
+<option value="High">
+High
+</option>
+
+<option value="Medium">
+Medium
+</option>
+
+<option value="Low">
+Low
+</option>
+
+</select>
+
+</div>
+
 <div
 id="tasks"
 class="tasks-wrapper">
@@ -600,13 +705,6 @@ document.getElementById('auth_email').value;
 const password =
 document.getElementById('auth_password').value;
 
-if(!email || !password){
-
-alert('Enter email and password');
-return;
-
-}
-
 const { error } =
 await supabaseClient.auth.signUp({
 
@@ -634,14 +732,7 @@ document.getElementById('auth_email').value;
 const password =
 document.getElementById('auth_password').value;
 
-if(!email || !password){
-
-alert('Enter email and password');
-return;
-
-}
-
-const { data, error } =
+const { error } =
 await supabaseClient.auth.signInWithPassword({
 
 email,
@@ -656,25 +747,16 @@ return;
 
 }
 
-localStorage.setItem(
-'carra_user',
-JSON.stringify(data.user)
-);
-
 document.getElementById('authModal')
 .style.display='none';
 
-setTimeout(async () => {
 await loadTasks();
-}, 300);
 
 }
 
 async function logout(){
 
 await supabaseClient.auth.signOut();
-
-localStorage.removeItem('carra_user');
 
 location.reload();
 
@@ -700,11 +782,32 @@ document.getElementById('authModal')
 document.getElementById('authModal')
 .style.display='none';
 
-setTimeout(async () => {
 await loadTasks();
-}, 300);
 
 }
+
+}
+
+// ===========================
+// UPDATE STATS
+// ===========================
+
+function updateStats(tasks){
+
+document.getElementById('totalTasks')
+.innerText=tasks.length;
+
+document.getElementById('pendingTasks')
+.innerText=
+tasks.filter(
+t=>t.task_status !== 'Completed'
+).length;
+
+document.getElementById('completedTasks')
+.innerText=
+tasks.filter(
+t=>t.task_status === 'Completed'
+).length;
 
 }
 
@@ -738,34 +841,68 @@ return;
 
 }
 
-document.getElementById('totalTasks')
-.innerText=tasks.length;
+let filteredTasks = tasks;
 
-document.getElementById('pendingTasks')
-.innerText=
-tasks.filter(
-t=>t.status !== 'Completed'
-).length;
+const search =
+document.getElementById('searchTask')?.value
+.toLowerCase() || '';
 
-document.getElementById('completedTasks')
-.innerText=
-tasks.filter(
-t=>t.status === 'Completed'
-).length;
+const filterStatus =
+document.getElementById('filterStatus')?.value || '';
+
+const filterPriority =
+document.getElementById('filterPriority')?.value || '';
+
+if(search){
+
+filteredTasks =
+filteredTasks.filter(task =>
+
+task.task_name
+.toLowerCase()
+.includes(search)
+
+);
+
+}
+
+if(filterStatus){
+
+filteredTasks =
+filteredTasks.filter(task =>
+
+task.task_status === filterStatus
+
+);
+
+}
+
+if(filterPriority){
+
+filteredTasks =
+filteredTasks.filter(task =>
+
+task.priority === filterPriority
+
+);
+
+}
+
+updateStats(filteredTasks);
 
 const tasksDiv =
 document.getElementById('tasks');
 
 tasksDiv.innerHTML='';
 
-if(tasks.length===0){
+if(filteredTasks.length===0){
 
 tasksDiv.innerHTML=`
 
 <div class="empty-state">
 
 <h2>
-No Tasks Yet
+No Tasks Found
 </h2>
 
 </div>
@@ -776,7 +913,7 @@ return;
 
 }
 
-tasks.forEach(task=>{
+filteredTasks.forEach(task=>{
 
 const priorityClass=
 task.priority==='High'
@@ -785,9 +922,14 @@ task.priority==='High'
 ? 'medium'
 : 'low';
 
+const isOverdue =
+task.due_date &&
+new Date(task.due_date) < new Date() &&
+task.task_status !== 'Completed';
+
 tasksDiv.innerHTML += `
 
-<div class="task">
+<div class="task ${isOverdue ? 'overdue' : ''}">
 
 <div class="task-header">
 
@@ -842,11 +984,28 @@ Status
 </div>
 
 <div class="info-value
-${task.status==='Completed'
+${task.task_status==='Completed'
 ? 'completed'
 : 'pending'}">
 
-${task.status}
+${task.task_status}
+
+</div>
+
+</div>
+
+<div class="info-box">
+
+<div class="info-label">
+Due Date
+</div>
+
+<div class="info-value">
+
+${task.due_date
+? new Date(task.due_date)
+.toLocaleString()
+: 'No Due Date'}
 
 </div>
 
@@ -899,22 +1058,6 @@ return;
 
 }
 
-const taskName =
-document.getElementById('task_name').value;
-
-const assignedTo =
-document.getElementById('assigned_to').value;
-
-const assignedPhone =
-document.getElementById('assigned_phone').value;
-
-if(!taskName || !assignedTo || !assignedPhone){
-
-alert('Fill all fields');
-return;
-
-}
-
 const task={
 
 user_id:user.id,
@@ -923,16 +1066,23 @@ task_code:
 'TASK-'+
 Math.floor(Math.random()*100000),
 
-task_name:taskName,
+task_name:
+document.getElementById('task_name').value,
 
-assigned_to:assignedTo,
+assigned_to:
+document.getElementById('assigned_to').value,
 
-assigned_phone:assignedPhone,
+assigned_phone:
+document.getElementById('assigned_phone').value,
 
 priority:
 document.getElementById('priority').value,
 
-status:'Pending',
+task_status:
+document.getElementById('task_status').value,
+
+due_date:
+document.getElementById('due_date').value || null,
 
 frequency:'once'
 
@@ -954,10 +1104,9 @@ return;
 document.getElementById('task_name').value='';
 document.getElementById('assigned_to').value='';
 document.getElementById('assigned_phone').value='';
+document.getElementById('due_date').value='';
 
-setTimeout(async () => {
 await loadTasks();
-}, 300);
 
 }
 
@@ -970,13 +1119,11 @@ async function markCompleted(id){
 await supabaseClient
 .from('tasks')
 .update({
-status:'Completed'
+task_status:'Completed'
 })
 .eq('id',id);
 
-setTimeout(async () => {
 await loadTasks();
-}, 300);
 
 }
 
@@ -991,9 +1138,7 @@ await supabaseClient
 .delete()
 .eq('id',id);
 
-setTimeout(async () => {
 await loadTasks();
-}, 300);
 
 }
 
@@ -1004,39 +1149,27 @@ await loadTasks();
 checkUser();
 
 // ===========================
-// REALTIME FIXED
+// REALTIME
 // ===========================
 
-const channel =
-supabaseClient.channel('tasks-db');
+supabaseClient
+.channel('tasks-db')
 
-channel.on(
+.on(
 'postgres_changes',
 {
 event:'*',
 schema:'public',
 table:'tasks'
 },
-async payload => {
-
-console.log(
-'Realtime update:',
-payload
-);
+async () => {
 
 await loadTasks();
 
 }
-);
+)
 
-channel.subscribe((status)=>{
-
-console.log(
-'Realtime status:',
-status
-);
-
-});
+.subscribe();
 
 </script>
 
