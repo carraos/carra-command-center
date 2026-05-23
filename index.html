@@ -845,6 +845,36 @@ loadTasks();
 
 checkUser();
 
+// ===========================
+// REALTIME SUBSCRIPTION
+// ===========================
+
+supabaseClient
+.channel('tasks-realtime')
+
+.on(
+  'postgres_changes',
+  {
+    event:'*',
+    schema:'public',
+    table:'tasks'
+  },
+
+  payload => {
+
+    console.log(
+      'Realtime update:',
+      payload
+    );
+
+    loadTasks();
+
+  }
+
+)
+
+.subscribe();
+
 </script>
 
 </body>
