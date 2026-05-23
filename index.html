@@ -12,6 +12,10 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
@@ -464,8 +468,6 @@ border:1px solid rgba(255,255,255,0.08);
 
 transition:0.25s;
 
-color-scheme:dark;
-
 cursor:pointer;
 
 }
@@ -479,22 +481,76 @@ box-shadow:
 
 }
 
-.modern-date::-webkit-calendar-picker-indicator{
+.flatpickr-calendar{
 
-filter:invert(1);
+background:#0f172a !important;
 
-opacity:0.85;
+border:1px solid rgba(255,255,255,0.08) !important;
 
-cursor:pointer;
+box-shadow:
+0 20px 50px rgba(0,0,0,0.45) !important;
 
-transition:0.2s;
+border-radius:22px !important;
+
+overflow:hidden;
 
 }
 
-.modern-date::-webkit-calendar-picker-indicator:hover{
+.flatpickr-months{
 
-opacity:1;
-transform:scale(1.08);
+background:#111827 !important;
+
+padding:10px 0;
+
+}
+
+.flatpickr-current-month{
+
+color:white !important;
+
+font-weight:700 !important;
+
+}
+
+.flatpickr-weekday{
+color:#94a3b8 !important;
+}
+
+.flatpickr-day{
+
+color:white !important;
+
+border-radius:12px !important;
+
+}
+
+.flatpickr-day.selected{
+
+background:#2563eb !important;
+
+border-color:#2563eb !important;
+
+}
+
+.flatpickr-day:hover{
+
+background:#1e293b !important;
+
+}
+
+.flatpickr-time{
+
+background:#111827 !important;
+
+border-top:1px solid rgba(255,255,255,0.05) !important;
+
+}
+
+.flatpickr-time input{
+
+color:white !important;
+
+font-weight:600;
 
 }
 
@@ -631,9 +687,10 @@ placeholder="Phone Number"
 </label>
 
 <input
-type="datetime-local"
+type="text"
 id="due_date"
 class="modern-date"
+placeholder="Select Due Date & Time"
 />
 
 </div>
@@ -774,6 +831,22 @@ const supabaseClient = supabase.createClient(
 'https://xxsmolqcwbvitmryfgfa.supabase.co',
 'sb_publishable_ejNWxFkpYXoMrjpL0GZtuQ_PvCd1k5f'
 );
+
+flatpickr("#due_date", {
+
+enableTime: true,
+
+dateFormat: "Y-m-d h:i K",
+
+time_24hr: false,
+
+minDate: "today",
+
+minuteIncrement: 5,
+
+disableMobile: true
+
+});
 
 async function signUp(){
 
