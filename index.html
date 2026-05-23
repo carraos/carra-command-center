@@ -282,40 +282,79 @@ color:white !important;
 color:white !important;
 }
 
+/* PREMIUM KANBAN */
+
 .kanban-board{
 
 display:grid;
 grid-template-columns:repeat(4,1fr);
 gap:20px;
+margin-top:25px;
 
 }
 
 .kanban-column{
 
 background:
-rgba(255,255,255,0.03);
+linear-gradient(
+180deg,
+rgba(15,23,42,0.88),
+rgba(2,6,23,0.92)
+);
 
-border:
-1px solid rgba(255,255,255,0.08);
+border:1px solid rgba(255,255,255,0.06);
 
-border-radius:22px;
+border-radius:24px;
 
 padding:18px;
 
 min-height:650px;
 
-backdrop-filter:blur(12px);
+backdrop-filter:blur(18px);
+
+position:relative;
+
+overflow:hidden;
 
 }
 
-.kanban-title{
+.kanban-column::before{
 
-font-size:18px;
-font-weight:700;
+content:'';
 
-margin-bottom:20px;
+position:absolute;
 
-color:white;
+top:0;
+left:0;
+
+width:100%;
+height:1px;
+
+background:
+linear-gradient(
+90deg,
+transparent,
+rgba(59,130,246,0.6),
+transparent
+);
+
+}
+
+.kanban-header{
+
+font-size:20px;
+font-weight:800;
+
+margin-bottom:18px;
+
+display:flex;
+align-items:center;
+gap:10px;
+
+padding-bottom:14px;
+
+border-bottom:
+1px solid rgba(255,255,255,0.05);
 
 }
 
@@ -323,7 +362,7 @@ color:white;
 
 display:flex;
 flex-direction:column;
-gap:18px;
+gap:16px;
 
 min-height:500px;
 
@@ -348,6 +387,34 @@ overflow:hidden;
 
 animation:fadeIn 0.3s ease;
 
+transition:
+transform 0.25s ease,
+box-shadow 0.25s ease,
+border 0.25s ease;
+
+cursor:grab;
+
+}
+
+.task:hover{
+
+transform:
+translateY(-4px)
+scale(1.01);
+
+box-shadow:
+0 20px 45px rgba(0,0,0,0.35);
+
+border:
+1px solid rgba(59,130,246,0.4);
+
+}
+
+.task.dragging{
+
+opacity:0.5;
+transform:scale(0.98);
+
 }
 
 .overdue{
@@ -368,6 +435,20 @@ width:5px;
 height:100%;
 
 background:#3b82f6;
+
+}
+
+@keyframes fadeIn{
+
+from{
+opacity:0;
+transform:translateY(10px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
 
 }
 
@@ -529,11 +610,15 @@ padding:60px;
 color:#94a3b8;
 }
 
-@media(max-width:1200px){
+@media(max-width:1400px){
 
 .kanban-board{
-grid-template-columns:1fr;
+grid-template-columns:repeat(2,1fr);
 }
+
+}
+
+@media(max-width:1200px){
 
 .grid{
 grid-template-columns:1fr;
@@ -541,6 +626,14 @@ grid-template-columns:1fr;
 
 body{
 padding:20px;
+}
+
+}
+
+@media(max-width:900px){
+
+.kanban-board{
+grid-template-columns:1fr;
 }
 
 }
@@ -704,24 +797,44 @@ onkeyup="loadTasks()"
 
 <div class="kanban-board">
 
-<div class="kanban-column">
-<h3 class="kanban-title">📌 Pending</h3>
+<div class="kanban-column" data-status="Pending">
+
+<div class="kanban-header">
+📌 Pending
+</div>
+
 <div id="Pending" class="kanban-tasks"></div>
+
 </div>
 
-<div class="kanban-column">
-<h3 class="kanban-title">🚀 In Progress</h3>
+<div class="kanban-column" data-status="In Progress">
+
+<div class="kanban-header">
+🚀 In Progress
+</div>
+
 <div id="In Progress" class="kanban-tasks"></div>
+
 </div>
 
-<div class="kanban-column">
-<h3 class="kanban-title">⏳ Waiting</h3>
+<div class="kanban-column" data-status="Waiting">
+
+<div class="kanban-header">
+⏳ Waiting
+</div>
+
 <div id="Waiting" class="kanban-tasks"></div>
+
 </div>
 
-<div class="kanban-column">
-<h3 class="kanban-title">✅ Completed</h3>
+<div class="kanban-column" data-status="Completed">
+
+<div class="kanban-header">
+✅ Completed
+</div>
+
 <div id="Completed" class="kanban-tasks"></div>
+
 </div>
 
 </div>
@@ -749,6 +862,8 @@ minuteIncrement:5,
 disableMobile:true
 
 });
+
+let draggedTaskId = null;
 
 async function signUp(){
 
@@ -936,24 +1051,6 @@ document.getElementById('In Progress').innerHTML='';
 document.getElementById('Waiting').innerHTML='';
 document.getElementById('Completed').innerHTML='';
 
-if(filteredTasks.length===0){
-
-document.getElementById('Pending').innerHTML=`
-
-<div class="empty-state">
-
-<h2>
-No Tasks Found
-</h2>
-
-</div>
-
-`;
-
-return;
-
-}
-
 filteredTasks.forEach(task=>{
 
 const priorityClass=
@@ -970,7 +1067,10 @@ task.task_status !== 'Completed';
 
 document.getElementById(task.task_status).innerHTML += `
 
-<div class="task ${isOverdue ? 'overdue' : ''}">
+<div
+class="task ${isOverdue ? 'overdue' : ''}"
+draggable="true"
+data-id="${task.id}">
 
 <div class="task-header">
 
@@ -1060,6 +1160,60 @@ onclick="deleteTask('${task.id}')">
 </div>
 
 `;
+
+});
+
+addDragEvents();
+
+}
+
+function addDragEvents(){
+
+document.querySelectorAll('.task').forEach(task=>{
+
+task.addEventListener('dragstart',()=>{
+
+draggedTaskId = task.dataset.id;
+
+task.classList.add('dragging');
+
+});
+
+task.addEventListener('dragend',()=>{
+
+task.classList.remove('dragging');
+
+});
+
+});
+
+document.querySelectorAll('.kanban-column').forEach(column=>{
+
+column.addEventListener('dragover',(e)=>{
+
+e.preventDefault();
+
+});
+
+column.addEventListener('drop',async ()=>{
+
+if(!draggedTaskId) return;
+
+const newStatus =
+column.dataset.status;
+
+await supabaseClient
+.from('tasks')
+.update({
+task_status:newStatus
+})
+.eq('id',draggedTaskId);
+
+draggedTaskId = null;
+
+await loadTasks();
+
+});
 
 });
 
