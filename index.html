@@ -3,391 +3,384 @@
 
 <head>
 
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  <title>CARRA Command Center</title>
+<title>CARRA Command Center</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <style>
+<style>
 
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family:'Inter',sans-serif;
-    }
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Inter',sans-serif;
+}
 
-    body{
+body{
 
-      background:
-      radial-gradient(circle at top left,#1d4ed8 0%,transparent 30%),
-      radial-gradient(circle at bottom right,#0f172a 0%,transparent 35%),
-      #050816;
+background:
+radial-gradient(circle at top left,#1d4ed8 0%,transparent 30%),
+radial-gradient(circle at bottom right,#0f172a 0%,transparent 35%),
+#050816;
 
-      color:white;
-      min-height:100vh;
-      padding:40px;
+color:white;
+min-height:100vh;
+padding:40px;
 
-    }
+}
 
-    .container{
-      max-width:1400px;
-      margin:auto;
-    }
+.container{
+max-width:1400px;
+margin:auto;
+}
 
-    .topbar{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:35px;
-      flex-wrap:wrap;
-      gap:20px;
-    }
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:35px;
+flex-wrap:wrap;
+gap:20px;
+}
 
-    .logo-section h1{
-      font-size:42px;
-      font-weight:800;
-      letter-spacing:-1px;
-    }
+.logo-section h1{
+font-size:42px;
+font-weight:800;
+letter-spacing:-1px;
+}
 
-    .logo-section p{
-      margin-top:8px;
-      color:#94a3b8;
-      font-size:15px;
-    }
+.logo-section p{
+margin-top:8px;
+color:#94a3b8;
+font-size:15px;
+}
 
-    .stats{
-      display:flex;
-      gap:15px;
-      flex-wrap:wrap;
-    }
+.stats{
+display:flex;
+gap:15px;
+flex-wrap:wrap;
+}
 
-    .stat-box{
+.stat-box{
 
-      background:rgba(255,255,255,0.05);
-      border:1px solid rgba(255,255,255,0.08);
-      backdrop-filter:blur(14px);
+background:rgba(255,255,255,0.05);
+border:1px solid rgba(255,255,255,0.08);
+backdrop-filter:blur(14px);
 
-      padding:18px 22px;
-      border-radius:18px;
-      min-width:140px;
+padding:18px 22px;
+border-radius:18px;
+min-width:140px;
 
-    }
+}
 
-    .stat-box h3{
-      font-size:28px;
-      margin-bottom:5px;
-    }
+.stat-box h3{
+font-size:28px;
+margin-bottom:5px;
+}
 
-    .stat-box span{
-      color:#94a3b8;
-      font-size:13px;
-    }
+.stat-box span{
+color:#94a3b8;
+font-size:13px;
+}
 
-    .grid{
-      display:grid;
-      grid-template-columns:380px 1fr;
-      gap:25px;
-    }
+.grid{
+display:grid;
+grid-template-columns:380px 1fr;
+gap:25px;
+}
 
-    .card{
+.card{
 
-      background:rgba(19,26,46,0.75);
-      backdrop-filter:blur(20px);
+background:rgba(19,26,46,0.75);
+backdrop-filter:blur(20px);
 
-      border:1px solid rgba(255,255,255,0.08);
+border:1px solid rgba(255,255,255,0.08);
 
-      border-radius:24px;
-      padding:25px;
+border-radius:24px;
+padding:25px;
 
-      box-shadow:
-      0 10px 40px rgba(0,0,0,0.35);
+box-shadow:
+0 10px 40px rgba(0,0,0,0.35);
 
-    }
+}
 
-    .card h2{
-      margin-bottom:22px;
-      font-size:24px;
-    }
+.card h2{
+margin-bottom:22px;
+font-size:24px;
+}
 
-    input,select{
+input,select{
 
-      width:100%;
-      padding:16px;
-      margin-bottom:18px;
+width:100%;
+padding:16px;
+margin-bottom:18px;
 
-      border:none;
-      border-radius:16px;
+border:none;
+border-radius:16px;
 
-      background:#111827;
-      color:white;
+background:#111827;
+color:white;
 
-      font-size:15px;
-      outline:none;
+font-size:15px;
+outline:none;
 
-      border:1px solid transparent;
+border:1px solid transparent;
 
-      transition:0.2s;
+transition:0.2s;
 
-    }
+}
 
-    input:focus,
-    select:focus{
+input:focus,
+select:focus{
 
-      border-color:#3b82f6;
+border-color:#3b82f6;
 
-      box-shadow:
-      0 0 0 4px rgba(59,130,246,0.15);
+box-shadow:
+0 0 0 4px rgba(59,130,246,0.15);
 
-    }
+}
 
-    .create-btn{
+.create-btn{
 
-      width:100%;
-      padding:16px;
+width:100%;
+padding:16px;
 
-      border:none;
-      border-radius:16px;
+border:none;
+border-radius:16px;
 
-      background:
-      linear-gradient(
-      135deg,
-      #2563eb,
-      #3b82f6
-      );
+background:
+linear-gradient(
+135deg,
+#2563eb,
+#3b82f6
+);
 
-      color:white;
-      font-size:15px;
-      font-weight:700;
+color:white;
+font-size:15px;
+font-weight:700;
 
-      cursor:pointer;
-      transition:0.25s;
+cursor:pointer;
+transition:0.25s;
 
-    }
+}
 
-    .create-btn:hover{
+.tasks-wrapper{
+display:flex;
+flex-direction:column;
+gap:18px;
+}
 
-      transform:translateY(-2px);
+.task{
 
-      box-shadow:
-      0 15px 35px rgba(37,99,235,0.4);
+background:
+linear-gradient(
+145deg,
+rgba(30,41,59,0.95),
+rgba(15,23,42,0.95)
+);
 
-    }
+border:1px solid rgba(255,255,255,0.06);
 
-    .tasks-wrapper{
-      display:flex;
-      flex-direction:column;
-      gap:18px;
-    }
+border-radius:22px;
+padding:24px;
 
-    .task{
+position:relative;
+overflow:hidden;
 
-      background:
-      linear-gradient(
-      145deg,
-      rgba(30,41,59,0.95),
-      rgba(15,23,42,0.95)
-      );
+}
 
-      border:1px solid rgba(255,255,255,0.06);
+.task::before{
 
-      border-radius:22px;
-      padding:24px;
+content:'';
 
-      position:relative;
-      overflow:hidden;
+position:absolute;
 
-    }
+top:0;
+left:0;
 
-    .task::before{
+width:5px;
+height:100%;
 
-      content:'';
+background:#3b82f6;
 
-      position:absolute;
+}
 
-      top:0;
-      left:0;
+.task-header{
+display:flex;
+justify-content:space-between;
+gap:15px;
+align-items:flex-start;
+flex-wrap:wrap;
+margin-bottom:15px;
+}
 
-      width:5px;
-      height:100%;
+.task-title{
+font-size:24px;
+font-weight:700;
+}
 
-      background:#3b82f6;
+.task-code{
+color:#64748b;
+font-size:13px;
+margin-top:5px;
+}
 
-    }
+.task-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:15px;
+margin-top:20px;
+}
 
-    .task-header{
-      display:flex;
-      justify-content:space-between;
-      gap:15px;
-      align-items:flex-start;
-      flex-wrap:wrap;
-      margin-bottom:15px;
-    }
+.info-box{
+background:rgba(255,255,255,0.03);
+border-radius:16px;
+padding:16px;
+}
 
-    .task-title{
-      font-size:24px;
-      font-weight:700;
-    }
+.info-label{
+color:#94a3b8;
+font-size:12px;
+margin-bottom:8px;
+text-transform:uppercase;
+letter-spacing:1px;
+}
 
-    .task-code{
-      color:#64748b;
-      font-size:13px;
-      margin-top:5px;
-    }
+.info-value{
+font-size:15px;
+font-weight:600;
+}
 
-    .task-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-      gap:15px;
-      margin-top:20px;
-    }
+.priority{
 
-    .info-box{
-      background:rgba(255,255,255,0.03);
-      border-radius:16px;
-      padding:16px;
-    }
+display:inline-flex;
+align-items:center;
+justify-content:center;
 
-    .info-label{
-      color:#94a3b8;
-      font-size:12px;
-      margin-bottom:8px;
-      text-transform:uppercase;
-      letter-spacing:1px;
-    }
+padding:8px 14px;
 
-    .info-value{
-      font-size:15px;
-      font-weight:600;
-    }
+border-radius:999px;
 
-    .priority{
+font-size:12px;
+font-weight:700;
 
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
+}
 
-      padding:8px 14px;
+.high{
+background:rgba(239,68,68,0.18);
+color:#f87171;
+}
 
-      border-radius:999px;
+.medium{
+background:rgba(245,158,11,0.18);
+color:#fbbf24;
+}
 
-      font-size:12px;
-      font-weight:700;
+.low{
+background:rgba(16,185,129,0.18);
+color:#34d399;
+}
 
-    }
+.completed{
+color:#10b981;
+font-weight:700;
+}
 
-    .high{
-      background:rgba(239,68,68,0.18);
-      color:#f87171;
-    }
+.pending{
+color:#f59e0b;
+font-weight:700;
+}
 
-    .medium{
-      background:rgba(245,158,11,0.18);
-      color:#fbbf24;
-    }
+.task-actions{
+display:flex;
+gap:12px;
+margin-top:24px;
+flex-wrap:wrap;
+}
 
-    .low{
-      background:rgba(16,185,129,0.18);
-      color:#34d399;
-    }
+.btn{
 
-    .completed{
-      color:#10b981;
-      font-weight:700;
-    }
+border:none;
+border-radius:14px;
 
-    .pending{
-      color:#f59e0b;
-      font-weight:700;
-    }
+padding:13px 18px;
 
-    .task-actions{
-      display:flex;
-      gap:12px;
-      margin-top:24px;
-      flex-wrap:wrap;
-    }
+font-size:14px;
+font-weight:600;
 
-    .btn{
+cursor:pointer;
 
-      border:none;
-      border-radius:14px;
+}
 
-      padding:13px 18px;
+.complete-btn{
+background:#10b981;
+color:white;
+}
 
-      font-size:14px;
-      font-weight:600;
+.delete-btn{
+background:#ef4444;
+color:white;
+}
 
-      cursor:pointer;
-      transition:0.2s;
+#authModal{
 
-    }
+position:fixed;
+inset:0;
 
-    .complete-btn{
-      background:#10b981;
-      color:white;
-    }
+background:rgba(2,6,23,0.92);
 
-    .delete-btn{
-      background:#ef4444;
-      color:white;
-    }
+backdrop-filter:blur(12px);
 
-    #authModal{
+display:none;
 
-      position:fixed;
-      inset:0;
+align-items:center;
+justify-content:center;
 
-      background:rgba(2,6,23,0.92);
+z-index:9999;
 
-      backdrop-filter:blur(12px);
+padding:20px;
 
-      display:none;
+}
 
-      align-items:center;
-      justify-content:center;
+.auth-card{
 
-      z-index:9999;
+width:100%;
+max-width:420px;
 
-      padding:20px;
+background:rgba(15,23,42,0.95);
 
-    }
+border:1px solid rgba(255,255,255,0.08);
 
-    .auth-card{
+border-radius:28px;
 
-      width:100%;
-      max-width:420px;
+padding:35px;
 
-      background:rgba(15,23,42,0.95);
+}
 
-      border:1px solid rgba(255,255,255,0.08);
+.auth-card h1{
+font-size:34px;
+margin-bottom:10px;
+}
 
-      border-radius:28px;
+.auth-card p{
+color:#94a3b8;
+margin-bottom:25px;
+}
 
-      padding:35px;
+.empty-state{
+text-align:center;
+padding:60px;
+color:#94a3b8;
+}
 
-      box-shadow:
-      0 20px 60px rgba(0,0,0,0.45);
-
-    }
-
-    .auth-card h1{
-      font-size:34px;
-      margin-bottom:10px;
-    }
-
-    .auth-card p{
-      color:#94a3b8;
-      margin-bottom:25px;
-    }
-
-  </style>
+</style>
 
 </head>
 
@@ -395,159 +388,159 @@
 
 <div id="authModal">
 
-  <div class="auth-card">
+<div class="auth-card">
 
-    <h1>🚀 CARRA OS</h1>
+<h1>🚀 CARRA OS</h1>
 
-    <p>
-      Secure Login Access
-    </p>
+<p>
+Secure Login Access
+</p>
 
-    <input
-      type="email"
-      id="auth_email"
-      placeholder="Email Address"
-    />
+<input
+type="email"
+id="auth_email"
+placeholder="Email Address"
+/>
 
-    <input
-      type="password"
-      id="auth_password"
-      placeholder="Password"
-    />
+<input
+type="password"
+id="auth_password"
+placeholder="Password"
+/>
 
-    <button
-      class="create-btn"
-      onclick="login()">
+<button
+class="create-btn"
+onclick="login()">
 
-      Login
+Login
 
-    </button>
+</button>
 
-    <button
-      class="create-btn"
-      style="margin-top:12px"
-      onclick="signUp()">
+<button
+class="create-btn"
+style="margin-top:12px"
+onclick="signUp()">
 
-      Create Account
+Create Account
 
-    </button>
+</button>
 
-  </div>
+</div>
 
 </div>
 
 <div class="container">
 
-  <div class="topbar">
+<div class="topbar">
 
-    <div class="logo-section">
+<div class="logo-section">
 
-      <h1>
-        🚀 CARRA Command Center
-      </h1>
+<h1>
+🚀 CARRA Command Center
+</h1>
 
-      <p>
-        Premium AI Powered Team Task Management System
-      </p>
+<p>
+Premium AI Powered Team Task Management System
+</p>
 
-    </div>
+</div>
 
-    <div class="stats">
+<div class="stats">
 
-      <div class="stat-box">
-        <h3 id="totalTasks">0</h3>
-        <span>Total Tasks</span>
-      </div>
+<div class="stat-box">
+<h3 id="totalTasks">0</h3>
+<span>Total Tasks</span>
+</div>
 
-      <div class="stat-box">
-        <h3 id="pendingTasks">0</h3>
-        <span>Pending</span>
-      </div>
+<div class="stat-box">
+<h3 id="pendingTasks">0</h3>
+<span>Pending</span>
+</div>
 
-      <div class="stat-box">
-        <h3 id="completedTasks">0</h3>
-        <span>Completed</span>
-      </div>
+<div class="stat-box">
+<h3 id="completedTasks">0</h3>
+<span>Completed</span>
+</div>
 
-    </div>
+</div>
 
-  </div>
+</div>
 
-  <div class="grid">
+<div class="grid">
 
-    <div class="card">
+<div class="card">
 
-      <h2>Create New Task</h2>
+<h2>Create New Task</h2>
 
-      <input
-        type="text"
-        id="task_name"
-        placeholder="Task Name"
-      />
+<input
+type="text"
+id="task_name"
+placeholder="Task Name"
+/>
 
-      <input
-        type="text"
-        id="assigned_to"
-        placeholder="Assigned To"
-      />
+<input
+type="text"
+id="assigned_to"
+placeholder="Assigned To"
+/>
 
-      <input
-        type="text"
-        id="assigned_phone"
-        placeholder="Phone Number"
-      />
+<input
+type="text"
+id="assigned_phone"
+placeholder="Phone Number"
+/>
 
-      <select id="priority">
+<select id="priority">
 
-        <option value="High">
-          High Priority
-        </option>
+<option value="High">
+High Priority
+</option>
 
-        <option value="Medium">
-          Medium Priority
-        </option>
+<option value="Medium">
+Medium Priority
+</option>
 
-        <option value="Low">
-          Low Priority
-        </option>
+<option value="Low">
+Low Priority
+</option>
 
-      </select>
+</select>
 
-      <button
-        class="create-btn"
-        onclick="createTask()">
+<button
+class="create-btn"
+onclick="createTask()">
 
-        Create Task
+Create Task
 
-      </button>
+</button>
 
-      <button
-        class="btn delete-btn"
-        style="
-        width:100%;
-        margin-top:15px;
-        "
-        onclick="logout()">
+<button
+class="btn delete-btn"
+style="
+width:100%;
+margin-top:15px;
+"
+onclick="logout()">
 
-        Logout
+Logout
 
-      </button>
+</button>
 
-    </div>
+</div>
 
-    <div class="card">
+<div class="card">
 
-      <h2>All Tasks</h2>
+<h2>All Tasks</h2>
 
-      <div
-        id="tasks"
-        class="tasks-wrapper">
+<div
+id="tasks"
+class="tasks-wrapper">
 
-      </div>
+</div>
 
-    </div>
+</div>
 
-  </div>
+</div>
 
 </div>
 
@@ -555,259 +548,302 @@
 
 <script>
 
-const API_URL =
-'https://carra-command-center.onrender.com';
+const supabaseClient = supabase.createClient(
+'https://xxsmolqcwbvitmryfgfa.supabase.co',
+'sb_publishable_ejNWxFkpYXoMrjpL0GZtuQ_PvCd1k5f'
+);
 
-// =======================================
-// AUTH CHECK
-// =======================================
+// ===========================
+// CHECK USER
+// ===========================
 
-const currentUser =
-localStorage.getItem('carra_user');
+async function checkUser(){
 
-if(!currentUser){
+const {
+data: { user }
+} = await supabaseClient.auth.getUser();
 
-  document.getElementById('authModal')
-  .style.display='flex';
+if(!user){
+
+document.getElementById('authModal')
+.style.display='flex';
+
+}else{
+
+document.getElementById('authModal')
+.style.display='none';
+
+loadTasks();
 
 }
 
-// =======================================
+}
+
+// ===========================
 // LOAD TASKS
-// =======================================
+// ===========================
 
 async function loadTasks(){
 
-  try{
+const {
+data: { user }
+} = await supabaseClient.auth.getUser();
 
-    const res =
-    await fetch(`${API_URL}/tasks`);
+if(!user) return;
 
-    const result =
-    await res.json();
+const {
+data: tasks,
+error
+} = await supabaseClient
+.from('tasks')
+.select('*')
+.eq('user_id', user.id)
+.order('created_at',{
+ascending:false
+});
 
-    const tasks =
-    result.data || [];
+if(error){
 
-    document.getElementById('totalTasks')
-    .innerText=tasks.length;
-
-    document.getElementById('pendingTasks')
-    .innerText=
-    tasks.filter(
-      t=>t.status !== 'Completed'
-    ).length;
-
-    document.getElementById('completedTasks')
-    .innerText=
-    tasks.filter(
-      t=>t.status === 'Completed'
-    ).length;
-
-    const tasksDiv =
-    document.getElementById('tasks');
-
-    tasksDiv.innerHTML='';
-
-    tasks.forEach(task=>{
-
-      const priorityClass=
-      task.priority==='High'
-      ? 'high'
-      : task.priority==='Medium'
-      ? 'medium'
-      : 'low';
-
-      tasksDiv.innerHTML += `
-
-      <div class="task">
-
-        <div class="task-header">
-
-          <div>
-
-            <div class="task-title">
-              ${task.task_name}
-            </div>
-
-            <div class="task-code">
-              ${task.task_code}
-            </div>
-
-          </div>
-
-          <div class="priority ${priorityClass}">
-            ${task.priority}
-          </div>
-
-        </div>
-
-        <div class="task-grid">
-
-          <div class="info-box">
-
-            <div class="info-label">
-              Assigned To
-            </div>
-
-            <div class="info-value">
-              ${task.assigned_to}
-            </div>
-
-          </div>
-
-          <div class="info-box">
-
-            <div class="info-label">
-              Phone Number
-            </div>
-
-            <div class="info-value">
-              ${task.assigned_phone}
-            </div>
-
-          </div>
-
-          <div class="info-box">
-
-            <div class="info-label">
-              Status
-            </div>
-
-            <div class="info-value
-            ${task.status==='Completed'
-            ? 'completed'
-            : 'pending'}">
-
-              ${task.status}
-
-            </div>
-
-          </div>
-
-        </div>
-
-        <div class="task-actions">
-
-          <button
-            class="btn complete-btn"
-            onclick="markCompleted('${task.id}')">
-
-            ✅ Complete
-
-          </button>
-
-          <button
-            class="btn delete-btn"
-            onclick="deleteTask('${task.id}')">
-
-            🗑 Delete
-
-          </button>
-
-        </div>
-
-      </div>
-
-      `;
-
-    });
-
-  }catch(err){
-
-    console.error(err);
-
-  }
+console.error(error);
+return;
 
 }
 
-// =======================================
+document.getElementById('totalTasks')
+.innerText=tasks.length;
+
+document.getElementById('pendingTasks')
+.innerText=
+tasks.filter(
+t=>t.status !== 'Completed'
+).length;
+
+document.getElementById('completedTasks')
+.innerText=
+tasks.filter(
+t=>t.status === 'Completed'
+).length;
+
+const tasksDiv =
+document.getElementById('tasks');
+
+tasksDiv.innerHTML='';
+
+if(tasks.length===0){
+
+tasksDiv.innerHTML=`
+
+<div class="empty-state">
+
+<h2>
+No Tasks Yet
+</h2>
+
+</div>
+
+`;
+
+return;
+
+}
+
+tasks.forEach(task=>{
+
+const priorityClass=
+task.priority==='High'
+? 'high'
+: task.priority==='Medium'
+? 'medium'
+: 'low';
+
+tasksDiv.innerHTML += `
+
+<div class="task">
+
+<div class="task-header">
+
+<div>
+
+<div class="task-title">
+${task.task_name}
+</div>
+
+<div class="task-code">
+${task.task_code}
+</div>
+
+</div>
+
+<div class="priority ${priorityClass}">
+${task.priority}
+</div>
+
+</div>
+
+<div class="task-grid">
+
+<div class="info-box">
+
+<div class="info-label">
+Assigned To
+</div>
+
+<div class="info-value">
+${task.assigned_to}
+</div>
+
+</div>
+
+<div class="info-box">
+
+<div class="info-label">
+Phone Number
+</div>
+
+<div class="info-value">
+${task.assigned_phone}
+</div>
+
+</div>
+
+<div class="info-box">
+
+<div class="info-label">
+Status
+</div>
+
+<div class="info-value
+${task.status==='Completed'
+? 'completed'
+: 'pending'}">
+
+${task.status}
+
+</div>
+
+</div>
+
+</div>
+
+<div class="task-actions">
+
+<button
+class="btn complete-btn"
+onclick="markCompleted('${task.id}')">
+
+✅ Complete
+
+</button>
+
+<button
+class="btn delete-btn"
+onclick="deleteTask('${task.id}')">
+
+🗑 Delete
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+// ===========================
 // CREATE TASK
-// =======================================
+// ===========================
 
 async function createTask(){
 
-  const task={
+const {
+data: { user }
+} = await supabaseClient.auth.getUser();
 
-    task_code:
-    'TASK-'+
-    Math.floor(Math.random()*100000),
+if(!user) return;
 
-    task_name:
-    document.getElementById('task_name').value,
+const task={
 
-    assigned_to:
-    document.getElementById('assigned_to').value,
+user_id:user.id,
 
-    assigned_phone:
-    document.getElementById('assigned_phone').value,
+task_code:
+'TASK-'+
+Math.floor(Math.random()*100000),
 
-    priority:
-    document.getElementById('priority').value,
+task_name:
+document.getElementById('task_name').value,
 
-    status:'Pending',
+assigned_to:
+document.getElementById('assigned_to').value,
 
-    frequency:'once'
+assigned_phone:
+document.getElementById('assigned_phone').value,
 
-  };
+priority:
+document.getElementById('priority').value,
 
-  await fetch(`${API_URL}/tasks`,{
+status:'Pending',
 
-    method:'POST',
+frequency:'once'
 
-    headers:{
-      'Content-Type':'application/json'
-    },
+};
 
-    body:JSON.stringify(task)
+const { error } =
+await supabaseClient
+.from('tasks')
+.insert([task]);
 
-  });
+if(error){
 
-  loadTasks();
+console.error(error);
+return;
 
 }
 
-// =======================================
+document.getElementById('task_name').value='';
+document.getElementById('assigned_to').value='';
+document.getElementById('assigned_phone').value='';
+
+loadTasks();
+
+}
+
+// ===========================
 // COMPLETE TASK
-// =======================================
+// ===========================
 
 async function markCompleted(id){
 
-  await fetch(`${API_URL}/tasks/${id}`,{
+await supabaseClient
+.from('tasks')
+.update({
+status:'Completed'
+})
+.eq('id',id);
 
-    method:'PUT',
-
-    headers:{
-      'Content-Type':'application/json'
-    },
-
-    body:JSON.stringify({
-      status:'Completed'
-    })
-
-  });
-
-  loadTasks();
+loadTasks();
 
 }
 
-// =======================================
+// ===========================
 // DELETE TASK
-// =======================================
+// ===========================
 
 async function deleteTask(id){
 
-  await fetch(`${API_URL}/tasks/${id}`,{
+await supabaseClient
+.from('tasks')
+.delete()
+.eq('id',id);
 
-    method:'DELETE'
-
-  });
-
-  loadTasks();
+loadTasks();
 
 }
 
-loadTasks();
+checkUser();
 
 </script>
 
