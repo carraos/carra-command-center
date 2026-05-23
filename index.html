@@ -3,13 +3,18 @@
 
 <head>
 
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
   <title>CARRA Command Center</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
+
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+  <script src="auth.js"></script>
 
   <style>
 
@@ -17,10 +22,11 @@
       margin:0;
       padding:0;
       box-sizing:border-box;
-      font-family:'Inter', sans-serif;
+      font-family:'Inter',sans-serif;
     }
 
     body{
+
       background:
       radial-gradient(circle at top left,#1d4ed8 0%,transparent 30%),
       radial-gradient(circle at bottom right,#0f172a 0%,transparent 35%),
@@ -29,6 +35,7 @@
       color:white;
       min-height:100vh;
       padding:40px;
+
     }
 
     .container{
@@ -57,6 +64,30 @@
       font-size:15px;
     }
 
+    .auth-buttons{
+      display:flex;
+      gap:10px;
+      margin-top:20px;
+      flex-wrap:wrap;
+    }
+
+    .auth-btn{
+
+      padding:12px 18px;
+      border:none;
+      border-radius:14px;
+      cursor:pointer;
+      font-weight:600;
+      color:white;
+      background:rgba(255,255,255,0.08);
+      backdrop-filter:blur(12px);
+
+    }
+
+    .logout-btn{
+      background:#ef4444;
+    }
+
     .stats{
       display:flex;
       gap:15px;
@@ -64,12 +95,15 @@
     }
 
     .stat-box{
+
       background:rgba(255,255,255,0.05);
       border:1px solid rgba(255,255,255,0.08);
       backdrop-filter:blur(14px);
+
       padding:18px 22px;
       border-radius:18px;
       min-width:140px;
+
     }
 
     .stat-box h3{
@@ -89,13 +123,18 @@
     }
 
     .card{
+
       background:rgba(19,26,46,0.75);
       backdrop-filter:blur(20px);
+
       border:1px solid rgba(255,255,255,0.08);
+
       border-radius:24px;
       padding:25px;
+
       box-shadow:
       0 10px 40px rgba(0,0,0,0.35);
+
     }
 
     .card h2{
@@ -103,35 +142,47 @@
       font-size:24px;
     }
 
-    input, select{
+    input,select{
 
       width:100%;
       padding:16px;
       margin-bottom:18px;
+
       border:none;
       border-radius:16px;
+
       background:#111827;
       color:white;
+
       font-size:15px;
       outline:none;
+
       border:1px solid transparent;
+
       transition:0.2s;
 
     }
 
     input:focus,
     select:focus{
+
       border-color:#3b82f6;
-      box-shadow:0 0 0 4px rgba(59,130,246,0.15);
+
+      box-shadow:
+      0 0 0 4px rgba(59,130,246,0.15);
+
     }
 
     .create-btn{
 
       width:100%;
       padding:16px;
+
       border:none;
       border-radius:16px;
-      background:linear-gradient(
+
+      background:
+      linear-gradient(
       135deg,
       #2563eb,
       #3b82f6
@@ -140,14 +191,19 @@
       color:white;
       font-size:15px;
       font-weight:700;
+
       cursor:pointer;
       transition:0.25s;
 
     }
 
     .create-btn:hover{
+
       transform:translateY(-2px);
-      box-shadow:0 15px 35px rgba(37,99,235,0.4);
+
+      box-shadow:
+      0 15px 35px rgba(37,99,235,0.4);
+
     }
 
     .tasks-wrapper{
@@ -176,13 +232,19 @@
     }
 
     .task::before{
+
       content:'';
+
       position:absolute;
+
       top:0;
       left:0;
+
       width:5px;
       height:100%;
+
       background:#3b82f6;
+
     }
 
     .task-header{
@@ -238,7 +300,9 @@
       justify-content:center;
 
       padding:8px 14px;
+
       border-radius:999px;
+
       font-size:12px;
       font-weight:700;
 
@@ -280,9 +344,12 @@
 
       border:none;
       border-radius:14px;
+
       padding:13px 18px;
+
       font-size:14px;
       font-weight:600;
+
       cursor:pointer;
       transition:0.2s;
 
@@ -309,15 +376,50 @@
       color:#94a3b8;
     }
 
-    .empty-state h3{
-      margin-top:20px;
-      font-size:24px;
-    }
-
     .loading{
       text-align:center;
       padding:50px;
       color:#94a3b8;
+    }
+
+    #auth-modal{
+
+      display:none;
+      position:fixed;
+
+      top:0;
+      left:0;
+
+      width:100%;
+      height:100%;
+
+      background:rgba(0,0,0,0.75);
+
+      backdrop-filter:blur(10px);
+
+      justify-content:center;
+      align-items:center;
+
+      z-index:9999;
+
+    }
+
+    .auth-box{
+
+      width:400px;
+
+      background:#131a2e;
+
+      border-radius:24px;
+
+      padding:30px;
+
+      border:1px solid rgba(255,255,255,0.08);
+
+    }
+
+    .auth-box h2{
+      margin-bottom:20px;
     }
 
     @media(max-width:1100px){
@@ -359,17 +461,119 @@
 
 <body>
 
+  <div id="auth-modal">
+
+    <div class="auth-box">
+
+      <h2 id="auth-title">
+        Login
+      </h2>
+
+      <input
+        type="email"
+        id="login_email"
+        placeholder="Email"
+      />
+
+      <input
+        type="password"
+        id="login_password"
+        placeholder="Password"
+      />
+
+      <input
+        type="email"
+        id="signup_email"
+        placeholder="Signup Email"
+        style="display:none;"
+      />
+
+      <input
+        type="password"
+        id="signup_password"
+        placeholder="Signup Password"
+        style="display:none;"
+      />
+
+      <button
+        class="create-btn"
+        id="login-btn"
+        onclick="login()">
+
+        Login
+
+      </button>
+
+      <button
+        class="create-btn"
+        id="signup-btn"
+        onclick="signUp()"
+        style="
+        margin-top:10px;
+        display:none;
+        ">
+
+        Create Account
+
+      </button>
+
+      <button
+        class="btn delete-btn"
+        onclick="closeAuth()"
+        style="
+        width:100%;
+        margin-top:10px;
+        ">
+
+        Close
+
+      </button>
+
+    </div>
+
+  </div>
+
   <div class="container">
 
     <div class="topbar">
 
       <div class="logo-section">
 
-        <h1>🚀 CARRA Command Center</h1>
+        <h1>
+          🚀 CARRA Command Center
+        </h1>
 
         <p>
           Premium AI Powered Team Task Management System
         </p>
+
+        <div class="auth-buttons">
+
+          <button
+            class="auth-btn"
+            onclick="showLogin()">
+
+            Login
+
+          </button>
+
+          <button
+            class="auth-btn"
+            onclick="showSignup()">
+
+            Signup
+
+          </button>
+
+          <button
+            class="auth-btn logout-btn"
+            onclick="logout()">
+
+            Logout
+
+          </button>
+
+        </div>
 
       </div>
 
@@ -420,9 +624,17 @@
 
         <select id="priority">
 
-          <option value="High">High Priority</option>
-          <option value="Medium">Medium Priority</option>
-          <option value="Low">Low Priority</option>
+          <option value="High">
+            High Priority
+          </option>
+
+          <option value="Medium">
+            Medium Priority
+          </option>
+
+          <option value="Low">
+            Low Priority
+          </option>
 
         </select>
 
@@ -458,16 +670,71 @@
 
   <script>
 
-    // ============================================
-    // LIVE API URL
-    // ============================================
-
     const API_URL =
     'https://carra-command-center.onrender.com';
 
-    // ============================================
-    // LOAD TASKS
-    // ============================================
+    function showLogin(){
+
+      document.getElementById('auth-modal')
+      .style.display='flex';
+
+      document.getElementById('auth-title')
+      .innerText='Login';
+
+      document.getElementById('login_email')
+      .style.display='block';
+
+      document.getElementById('login_password')
+      .style.display='block';
+
+      document.getElementById('login-btn')
+      .style.display='block';
+
+      document.getElementById('signup_email')
+      .style.display='none';
+
+      document.getElementById('signup_password')
+      .style.display='none';
+
+      document.getElementById('signup-btn')
+      .style.display='none';
+
+    }
+
+    function showSignup(){
+
+      document.getElementById('auth-modal')
+      .style.display='flex';
+
+      document.getElementById('auth-title')
+      .innerText='Create Account';
+
+      document.getElementById('login_email')
+      .style.display='none';
+
+      document.getElementById('login_password')
+      .style.display='none';
+
+      document.getElementById('login-btn')
+      .style.display='none';
+
+      document.getElementById('signup_email')
+      .style.display='block';
+
+      document.getElementById('signup_password')
+      .style.display='block';
+
+      document.getElementById('signup-btn')
+      .style.display='block';
+
+    }
+
+    function closeAuth(){
+
+      document.getElementById('auth-modal')
+      .style.display='none';
+
+    }
 
     async function loadTasks(){
 
@@ -482,37 +749,29 @@
         const tasksDiv =
         document.getElementById('tasks');
 
-        tasksDiv.innerHTML = '';
+        tasksDiv.innerHTML='';
 
         const tasks =
         result.data || [];
 
-        // ============================================
-        // STATS
-        // ============================================
-
         document.getElementById('totalTasks')
-        .innerText = tasks.length;
+        .innerText=tasks.length;
 
         document.getElementById('pendingTasks')
-        .innerText =
+        .innerText=
         tasks.filter(
-          t => t.status !== 'Completed'
+          t=>t.status !== 'Completed'
         ).length;
 
         document.getElementById('completedTasks')
-        .innerText =
+        .innerText=
         tasks.filter(
-          t => t.status === 'Completed'
+          t=>t.status === 'Completed'
         ).length;
 
-        // ============================================
-        // EMPTY STATE
-        // ============================================
+        if(tasks.length===0){
 
-        if(tasks.length === 0){
-
-          tasksDiv.innerHTML = `
+          tasksDiv.innerHTML=`
 
             <div class="empty-state">
 
@@ -522,10 +781,6 @@
 
               <h3>No Tasks Available</h3>
 
-              <p style="margin-top:10px">
-                Create your first task
-              </p>
-
             </div>
 
           `;
@@ -534,18 +789,14 @@
 
         }
 
-        // ============================================
-        // TASK RENDER
-        // ============================================
+        tasks.forEach(task=>{
 
-        tasks.forEach(task => {
+          const priorityClass=
 
-          const priorityClass =
-
-          task.priority === 'High'
+          task.priority==='High'
           ? 'high'
 
-          : task.priority === 'Medium'
+          : task.priority==='Medium'
           ? 'medium'
 
           : 'low';
@@ -607,9 +858,9 @@
                   </div>
 
                   <div class="info-value
-                  ${task.status === 'Completed'
-                    ? 'completed'
-                    : 'pending'}">
+                  ${task.status==='Completed'
+                  ? 'completed'
+                  : 'pending'}">
 
                     ${task.status}
 
@@ -649,45 +900,22 @@
 
         console.error(err);
 
-        document.getElementById('tasks')
-        .innerHTML = `
-
-          <div class="empty-state">
-
-            <div style="font-size:70px">
-              ⚠️
-            </div>
-
-            <h3>Failed To Load Tasks</h3>
-
-            <p style="margin-top:10px">
-              Backend may be sleeping on Render free tier
-            </p>
-
-          </div>
-
-        `;
-
       }
 
     }
 
-    // ============================================
-    // CREATE TASK
-    // ============================================
-
     async function createTask(){
 
-      const taskName =
+      const taskName=
       document.getElementById('task_name').value;
 
-      const assignedTo =
+      const assignedTo=
       document.getElementById('assigned_to').value;
 
-      const assignedPhone =
+      const assignedPhone=
       document.getElementById('assigned_phone').value;
 
-      const priority =
+      const priority=
       document.getElementById('priority').value;
 
       if(
@@ -702,29 +930,29 @@
 
       }
 
-      const task = {
+      const task={
 
         task_code:
-        'TASK-' +
-        Math.floor(Math.random() * 100000),
+        'TASK-'+
+        Math.floor(Math.random()*100000),
 
-        task_name: taskName,
+        task_name:taskName,
 
-        assigned_to: assignedTo,
+        assigned_to:assignedTo,
 
-        assigned_phone: assignedPhone,
+        assigned_phone:assignedPhone,
 
-        priority: priority,
+        priority:priority,
 
-        status: 'Pending',
+        status:'Pending',
 
-        frequency: 'once'
+        frequency:'once'
 
       };
 
       try{
 
-        await fetch(`${API_URL}/tasks`, {
+        await fetch(`${API_URL}/tasks`,{
 
           method:'POST',
 
@@ -736,13 +964,11 @@
 
         });
 
-        document.getElementById('task_name').value = '';
+        document.getElementById('task_name').value='';
 
-        document.getElementById('assigned_to').value = '';
+        document.getElementById('assigned_to').value='';
 
-        document.getElementById('assigned_phone').value = '';
-
-        document.getElementById('priority').value = 'High';
+        document.getElementById('assigned_phone').value='';
 
         loadTasks();
 
@@ -750,21 +976,15 @@
 
         console.error(err);
 
-        alert('Failed to create task');
-
       }
 
     }
-
-    // ============================================
-    // MARK COMPLETED
-    // ============================================
 
     async function markCompleted(id){
 
       try{
 
-        await fetch(`${API_URL}/tasks/${id}`, {
+        await fetch(`${API_URL}/tasks/${id}`,{
 
           method:'PUT',
 
@@ -784,26 +1004,20 @@
 
         console.error(err);
 
-        alert('Failed to update task');
-
       }
 
     }
 
-    // ============================================
-    // DELETE TASK
-    // ============================================
-
     async function deleteTask(id){
 
-      const confirmDelete =
+      const confirmDelete=
       confirm('Delete this task?');
 
       if(!confirmDelete) return;
 
       try{
 
-        await fetch(`${API_URL}/tasks/${id}`, {
+        await fetch(`${API_URL}/tasks/${id}`,{
 
           method:'DELETE'
 
@@ -815,15 +1029,9 @@
 
         console.error(err);
 
-        alert('Failed to delete task');
-
       }
 
     }
-
-    // ============================================
-    // INITIAL LOAD
-    // ============================================
 
     loadTasks();
 
